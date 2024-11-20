@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Fieldset Devices</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+        <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <script src="https://kit.fontawesome.com/663537bbd5.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+     </head>
+    <body>
+        <header class="header">
+            <nav class="navbar">
+                <div class="logo">
+                    <a href="index.html"><img src="./images/company-logo-light.png" alt="Logo"></img></a>
+                    <a href="index.html"><span>Fieldset Devices</span></a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Products</a></li>
+                    <li><a href="staff.html">The Team</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="https://web.facebook.com/?_rdc=1&_rdr" class="fa fa-facebook" target="_blank"></a></li>
+                    <li><a href="https://www.instagram.com/" class="fa fa-instagram" target="_blank"></a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <<main class="main-content">
+            <div class="container">
+                <div class="text">
+                    Write us a message
+                </div>
+                
+                <!--Form goes here-->
+                <form id="contactForm" action="#" method="post">
+                    <div class="form-row">
+                        <div class="input-data">
+                            <div class="input-label">First Name</div>
+                            <input type="text" name="firstName" placeholder="First Name" required>
+                            <div class="underline"></div>
+                        </div>
+                        <div class="input-data">
+                            <div class="input-label">Last Name</div>
+                            <input type="text" name="lastName" placeholder="Last Name" required>
+                            <div class="underline"></div>
+                        </div>
+                    </div>
+        
+                    <div class="form-row">
+                        <div class="input-data">
+                            <div class="input-label">Email Address</div>
+                            <input type="email" name="email" placeholder="Email Address" required>
+                            <div class="underline"></div>
+                        </div>
+                        <div class="input-data">
+                            <div class="input-label">Subject</div>
+                            <input type="text" name="subject" placeholder="Subject">
+                            <div class="underline"></div>
+                        </div>
+                    </div>
+        
+                    <div class="form-row">
+                        <div class="input-data textarea">
+                            <div class="input-label">Write your message</div>
+                            <textarea name="message" rows="8" cols="80" placeholder="Write your message here..." required maxlength="1000"></textarea>
+                        </div>
+                    </div>
+        
+                    <div class="form-row submit-btn">
+                        <div class="input-data">
+                            <input type="submit" value="Submit">
+                        </div>
+                    </div>
+                </form>
+
+                <div id="submissionMessage" class="submission">
+                    Form submitted successfully!
+                </div>
+            </div>
+        </main>
+        <!---->
+        
+        <script src="/js/main.js"></script>
+
+        <hr class="divider">
+
+        <div class="extra-container">
+            <div class="hidden-message">
+                <button class="hidden-button" onclick="showMessage()">Click for a hidden message</button>            
+                <p id="hiddenMessage">Ta-Da!</p>
+            </div>
+            
+            <div class="hidden-message">
+                <button class="hidden-button" onclick="showDate()">Show current date and time</button>
+                <p id="dateDisplay"></p>
+            </div>
+        </div>
+
+        <script>
+            function showMessage(){
+                const message  = document.getElementById("hiddenMessage");
+                message.style.display = "block";
+
+                setTimeout(function(){
+                    message.style.display = "none";
+                }, 3000);
+            }
+            function showDate(){
+                const dateDisplay = document.getElementById("dateDisplay");
+                const currentDate = new Date();
+                dateDisplay.style.display = "block"
+
+                const formatDate = currentDate.toLocaleString();
+                dateDisplay.textContent = formatDate;
+
+                setTimeout(function(){
+                    dateDisplay.style.display = "none";
+                }, 3000);
+            }
+        </script>
+
+        <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <a href="index.html"><img src="images/company-logo-light.png" alt="Logo"></a></img>
+                <a href="index.html"><span>Fieldset Devices</span></a>
+            </div>
+            <ul class="footer-links">
+                <li><a href="#privacy">Privacy Policy</a></li>
+                <li><a href="#terms">Terms of Service</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Fieldset Devices. All Rights Reserved.</p>
+            <div class="social-media">
+                <a href="https://facebook.com" target="_blank">Facebook</a>
+                <a href="https://twitter.com" target="_blank">Twitter</a>
+                <a href="https://instagram.com" target="_blank">Instagram</a>
+            </div>
+        </div>
+    </footer>
+    </body>
+
+    <script src="./js/main.js"></script>
+</html>

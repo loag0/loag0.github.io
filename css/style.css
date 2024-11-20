@@ -1,0 +1,547 @@
+@import url("https://kit.fontawesome.com/663537bbd5.js");
+
+body{
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    height: 100%;
+    background-color: rgb(0, 0, 0);
+    flex-direction: column;
+}
+.header{
+    height: 100%;
+    margin-bottom: 100px;
+}
+.navbar{
+    display: flex;
+    width: 100%;
+    height: fit-content;
+    overflow: hidden;
+    background-color: white;
+    padding: 5px;
+    justify-content: space-between;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    position: fixed;
+    align-items: center;
+    top: 0;
+    z-index: 10;
+}
+.logo{
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+.logo img{
+    margin-right: 10px;
+    height: 50px;
+    align-items: center;
+}
+.logo span{
+    font-size: 20px;
+    color: black;
+    white-space: nowrap;
+    text-align: center;
+}
+.nav-links{
+    list-style: none;
+    padding: 0;
+    display: flex;
+    margin: 0;
+    margin-right: 20px;
+}
+.navbar li{
+    margin-left: 20px;
+}
+.nav-links a{
+    color: black;
+    text-decoration: none;
+    margin-right: 20px;
+    font-weight: 400;
+}
+.navbar a:hover{
+    color: #1c5fc5;
+}
+a{
+    color: black;
+    background-color: transparent;
+    text-decoration: none;
+}
+.top-section{
+    background-size: cover;
+    margin-top: 90px;
+    text-align: center;
+    color: white;
+}
+.logo{
+    width: 50px;
+    height: auto;
+    margin-bottom: 10px;
+}
+.welcome{
+    text-align: center;
+}
+.welcome h1{
+    color: white; 
+    align-items: center; 
+    font-size: 40px;
+    margin-top: -50px;
+}
+.divider{
+    width: 99%;
+    background-color: #fff;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+.message p{
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: justify;
+    color: white;
+    font-size: 20px;
+    line-height: 1.6;
+}
+.about{
+    text-align: center;
+}
+.about h1{
+    font-size: 40px; 
+    text-align: center; 
+    color: white;
+}
+.about h2{
+    font-weight: bold; 
+    margin-bottom: 15px; 
+    font-size: 30px; 
+    text-align: center;
+    color: white;
+}
+.about p{
+    max-width: 1000px;
+    margin: 0 auto;
+    color: white;
+    text-align: justify;
+    font-size: 20px;   
+}
+.shortcut p{
+    margin: 20 auto;
+    color: white;
+    font-size: 23px;
+    text-align: center;
+}
+.shortcut a{
+    text-decoration: underline;
+    color: white;
+}
+.shortcut a:hover{
+    text-decoration: none;
+    color: #1c5fc5;
+}
+.bottom-section{
+    padding: 20px;
+    background-color: white;
+    text-align: center;
+}
+.shop-body{
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    background-color: black;
+    justify-content: center;
+}
+.anchor-instruction{
+    text-align: center;
+    color: white;
+    margin-bottom: 10px;
+}
+.anchor-links{
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding-bottom: 20px 0;
+}
+.anchor-links a{
+    padding: 10px 20px;
+    color: white;
+    background-color: #2c2c2c;
+    margin: 0 10px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3;
+    border-radius: 5px;
+    position: relative;
+}
+.anchor-links a:hover{
+    background-color: #1a1a2e;
+    color: #1c5fc5;
+}
+.anchor-links a:hover::after{
+    content: '\f061';
+    font-family: 'Font Awesome 6 Free';
+    padding: 5px;
+    right: -20px;
+}
+.table-container{
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+    padding: 100px;
+    margin-top: -100px;
+}
+.table-heading{
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 40px;
+    font-weight: bold;
+}
+.table{
+    border-collapse: inherit;
+    text-align: left;
+    color: white;
+    margin: 20px 0;
+    font-size: 18px;
+    min-height: 400px;
+    width: 1400px;
+}
+.table th,
+.table td{
+    border-bottom: 1px solid #444;
+    padding: 12px;
+}
+.table th{
+    background-color: #333;
+    color: #ffcc00;
+}
+.table tr:nth-child(even){
+    background-color: #222;
+}
+.table tr:hover{
+    background-color: #555;
+}
+.table a{
+    color: #ff6347;
+    text-decoration: none;
+}
+.product, .price, .description{
+    border-right: 1px solid #555;
+}
+.table a:hover{
+    text-decoration: underline;
+}
+.product-img{
+    height: 100px;
+    width: 100px;
+    cursor: pointer;
+}
+.staff-header{
+    color: white;
+    text-align: center;
+    padding-top: 20px;
+}
+.staff-container{
+    justify-content: center;
+    margin: 20px;
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+}
+.staff-cards {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+.staff-cards img{
+    height: 300px;
+    width: 300px;
+    display: flex;
+    margin: 0 auto;
+}
+.staff-name{
+    color: white;
+    text-align: center;
+    font-size: 20px;
+}
+.staff-name:hover{
+    cursor: pointer;
+}
+.staff-title{
+    color: #1c5fc5;
+    font-weight: bold;
+    text-align: center;
+    font-size: 20px;
+    letter-spacing: 1px;
+}
+.staff-title i{
+    margin-right: 10px;
+}
+.staff-bio{
+    color: white;
+    text-align: justify;
+    font-size: 20px;
+    max-width: 500px;
+}
+.footer {
+    background-color: #1a1a2e29;
+    padding: 20px;
+    text-align: center;
+    margin-top: 40px;
+    align-items: center;
+}
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.footer-logo {
+    display: flex;
+    align-items: center;
+    color: white;
+}
+.footer-logo img {
+    height: 30px;
+    margin-right: 10px;
+}
+.footer-logo a{
+    color: white;
+}
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    color: white;
+}
+.footer-links li {
+    margin-left: 20px;
+
+}
+.footer-links a {
+    text-decoration: none;
+    color: white;
+}
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    padding-top: 10px;
+    color: white;
+}
+
+.social-media {
+    margin-top: 10px;
+    color: white;
+}
+
+.social-media a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: white;
+}
+
+.social-media a:hover {
+    text-decoration: underline;
+}
+.contact-page::before{
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:url('/images/contact-bg.png') center;
+    opacity: 0.3;
+}
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: black;
+}
+.container {
+    background-color: white;
+    padding: 80px;
+    border-radius: 8px;
+    min-width: 500px;
+    width: fit-content;
+}
+.text {
+    font-size: 30px;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 50px;
+    text-align: center;
+}
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+.input-data {
+    position: relative;
+    width: 100%;
+    flex: 1;
+}
+.input-data input{
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: #333;
+    background-color: transparent;
+}
+.input-data textarea{
+    width: 95%;
+    padding: 15px;
+    margin-top: 10px;
+    font-size: 16px;
+    border-radius: 10px;
+    color: #333;
+    background-color: transparent;
+    resize: none;
+    position: relative;
+}
+.input-data label {
+    position: absolute;
+    top: 0;
+    left: 10px;
+    pointer-events: none;
+    transition: 0.3s ease;
+    color: #666;
+}
+.input-data input:focus + .underline,
+.input-data textarea:focus + .underline {
+    border-bottom: 2px solid #333;
+}
+.input-data input:focus + .underline + label,
+.input-data textarea:focus + .underline + label,
+.input-data input:valid + .underline + label,
+.input-data textarea:valid + .underline + label {
+    transform: translateY(-20px);
+    font-size: 12px;
+    color: #333;
+    transition: 0.3s ease;
+}
+.underline {
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    width: 100%;
+    background-color: #333;
+}
+.submit-btn input[type="submit"] {
+    font-family: 'Poppins';
+    width: 25%;
+    padding: 10px;
+    background-color: #1a1a2e;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.submit-btn input[type="submit"]:hover {
+    background-color: black;
+    color: white;
+    transition: color 0.5 ease-in-out;
+}
+.extra-container{
+    display: flex;
+    flex-direction: row ;
+    justify-content: center;
+}
+#submissionMessage{
+    color:  black;
+    font-size: 20px;
+    display: none;
+}
+#dateDisplay{
+    color: white;
+    margin: 20px;
+    display: none;
+}
+.hidden-message{
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+#hiddenMessage{
+    display: none;
+    color: white;
+}
+.hidden-button{
+    font-family: 'Poppins';
+    background-color: #1a1a2e;
+    color: white;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    max-width: 500px;
+}
+.hidden-button:hover{
+    color: black;
+    background-color: white;
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
+    transition: color 0.5 ease-in-out;
+}
+.hidden-button:active{
+    transform: translateY(1px);
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+}
+.services{
+    color: white;
+    display: flex;
+    padding: 30px;
+    flex-direction: column;
+}
+.services h2{
+    margin: 0;
+    font-size: 25px;
+    margin-top: 30px;
+}
+.services p{
+    font-size: 20px;
+}
+.services i{
+    margin-right: 10px;
+}
+.contact{
+    text-align: center;
+    color: white;
+}
+.contact a{
+    color: white;
+    text-decoration: underline;
+}
+.contact a:hover{
+    color: #1c5fc5;
+    text-decoration: none;
+}
+::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 10px;
+    overflow: auto;
+}
+::-webkit-scrollbar-track {
+    background: #1a1a1a; 
+}
+::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 6px;
+    height: 20px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #818181;
+}
