@@ -1,10 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import gsap from "gsap";
 import "./styles/index.css";
 import "animate.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope, faPhone, faLocationPin, faMoon } from "@fortawesome/free-solid-svg-icons"
+import { faEnvelope, faPhone, faLocationPin } from "@fortawesome/free-solid-svg-icons"
 import { Carousel, CarouselItem } from "./components/Carousel";
 
 export default function Index() {
@@ -58,12 +58,33 @@ export default function Index() {
     first.addEventListener("mouseenter", () => bounce(first));
     last.addEventListener("mouseenter", () => bounce(last));
 
-    // cleanup in case component unmounts
     return () => {
       first.removeEventListener("mouseenter", () => bounce(first));
       last.removeEventListener("mouseenter", () => bounce(last));
     };
   }, []);
+
+  {/* Dark Mode Toggle */}
+
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = document.documentElement.getAttribute("data-theme");
+    if (savedTheme === "dark") {
+      setIsDark(true);
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = !isDark;
+    setIsDark(newTheme);
+
+    document.documentElement.setAttribute(
+      "data-theme",
+      newTheme ? "dark" : "light"
+    );
+
+  };
 
   return (
     <>
@@ -72,10 +93,15 @@ export default function Index() {
           <div className="min-w-full mx-auto px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="text-2xl font-bold text-[#111111] justify-start px-5">
-                Loago Moremi
-                <span id="dark-mode-toggle" className="ml-4 cursor-pointer" tooltip="Toggle Dark Mode">
-                    <FontAwesomeIcon icon={faMoon} />
-                </span>
+                <a
+                  href="/"
+                  onClick={(e) =>
+                    window.scrollTo({ top: 0, behavior: "smooth" }) ||
+                    e.preventDefault()
+                  }
+                >
+                  Loago Moremi
+                </a>
               </div>
 
               <div className="links-container">
@@ -98,6 +124,7 @@ export default function Index() {
         </nav>
 
         {/*Intro Section */}
+        
         <div className="page-container">
           <div className="py-20 px-6 bg-[#f5f5f5] min-h-2xl mx-auto min-w-screen">
             <div className="max-w-6xl mx-auto text-center">
@@ -209,6 +236,8 @@ export default function Index() {
             </div>
           </section>
 
+          {/*Contact Section */}
+
           <section id="contact" className="py-20 px-6">
             <div className="max-w-4xl mx-auto text-center">
               <h2 className="text-4xl font-bold text-[#111111] mb-4">
@@ -285,7 +314,13 @@ export default function Index() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-6 md:mb-0">
-              <a href="#container">
+              <a
+                href="/"
+                onClick={(e) =>
+                  window.scrollTo({ top: 0, behavior: "smooth" }) ||
+                  e.preventDefault()
+                }
+              >
                 <span className="text-xl font-semibold mb-2" id="first-name">
                   Loago
                 </span>
@@ -329,6 +364,42 @@ export default function Index() {
           </div>
         </div>
       </footer>
+
+      <button
+        onClick={toggleTheme}
+        className="fixed bottom-6 right-6 w-14 h-14 bg-[#cbcbcb] dark:bg-[#cbcbcb] hover:bg-[#1a1a2c] dark:hover:bg-gray-600 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center z-50 group"
+        aria-label="Toggle dark mode"
+      >
+        {/* Sun Icon for Light Mode */}
+        <svg
+          className={`w-6 h-6 text-yellow-500 transition-all duration-300 ${
+            isDark
+              ? "opacity-0 rotate-180 scale-0"
+              : "opacity-100 rotate-0 scale-100"
+          }`}
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path
+            fillRule="evenodd"
+            d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+            clipRule="evenodd"
+          />
+        </svg>
+
+        {/* Moon Icon for Dark Mode */}
+        <svg
+          className={`w-6 h-6 text-blue-400 absolute transition-all duration-300 ${
+            isDark
+              ? "opacity-100 rotate-0 scale-100"
+              : "opacity-0 rotate-180 scale-0"
+          }`}
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+        </svg>
+      </button>
     </>
   );
 }
