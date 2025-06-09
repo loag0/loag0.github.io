@@ -1,7 +1,10 @@
+import { useEffect } from "react";
+import gsap from "gsap";
 import "./styles/index.css";
 import "animate.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import { faEnvelope, faPhone, faLocationPin, faMoon } from "@fortawesome/free-solid-svg-icons"
 import { Carousel, CarouselItem } from "./components/Carousel";
 
 export default function Index() {
@@ -33,14 +36,46 @@ export default function Index() {
     },
   ];
 
+  useEffect(() => {
+    const first = document.getElementById("first-name");
+    const last = document.getElementById("last-name");
+
+    const bounce = (el) => {
+      gsap.to(el, {
+        y: -10,
+        duration: 0.2,
+        ease: "power1.out",
+        onComplete: () => {
+          gsap.to(el, {
+            y: 0,
+            duration: 0.4,
+            ease: "bounce.out",
+          });
+        },
+      });
+    };
+
+    first.addEventListener("mouseenter", () => bounce(first));
+    last.addEventListener("mouseenter", () => bounce(last));
+
+    // cleanup in case component unmounts
+    return () => {
+      first.removeEventListener("mouseenter", () => bounce(first));
+      last.removeEventListener("mouseenter", () => bounce(last));
+    };
+  }, []);
+
   return (
     <>
-      <div className="container">
+      <div className="container" id="container">
         <nav className="navbar">
-          <div className="min-w-screen mx-auto px-6 py-4">
+          <div className="min-w-full mx-auto px-6 py-4">
             <div className="flex items-center justify-between">
-              <div className="text-2xl font-bold text-[#111111] justify-start">
+              <div className="text-2xl font-bold text-[#111111] justify-start px-5">
                 Loago Moremi
+                <span id="dark-mode-toggle" className="ml-4 cursor-pointer" tooltip="Toggle Dark Mode">
+                    <FontAwesomeIcon icon={faMoon} />
+                </span>
               </div>
 
               <div className="links-container">
@@ -67,20 +102,15 @@ export default function Index() {
           <div className="py-20 px-6 bg-[#f5f5f5] min-h-2xl mx-auto min-w-screen">
             <div className="max-w-6xl mx-auto text-center">
               <h1 className="text-5xl font-bold text-[#111111] mb-6">
-                Hello, I'm{" "}
-                <span
-                  className="text-[#3f3f3f]"
-                  class="animate__animated  animate__lightSpeedInLeft"
-                >
-                  Loago Moremi
-                </span>
+                Hello, I'm <span className="text-[#3f3f3f]">Loago Moremi</span>
               </h1>
-              <p
-                className="text-xl text-[#727272] mb-8 max-w-2xl mx-auto"
-                class="animate__animated animate__fadeInUp"
-              >
-                A passionate software developer with a knack for building
-                scalable web applications.
+              <p className="text-xl text-[#727272] mb-8 max-w-4xl mx-auto">
+                I'm a Computer Science student with a strong passion for
+                front-end development and creative design. I enjoy building
+                clean, responsive web interfaces and continuously exploring new
+                technologies to improve my skills. I'm driven, curious, and
+                committed to crafting digital experiences that are both
+                functional and visually engaging."
               </p>
             </div>
           </div>
@@ -176,18 +206,124 @@ export default function Index() {
               </div>
             </div>
           </section>
+
+          <section id="contact" className="py-20 px-6">
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-4xl font-bold text-[#111111] mb-4">
+                Let's Work Together
+              </h2>
+              <p className="text-1xl text-[#727272] mb-16 max-w-2xl mx-auto">
+                Got a project in mind? I'd love to hear about it.{" "}
+              </p>
+
+              <div className="grid md:grid-cols-3 gap-8 max-w-3xl mx-auto">
+                <div className="flex flex-col items-center space-y-4">
+                  <div
+                    className="bg-[#111111] p-4 rounded-full"
+                    id="contact-icons"
+                  >
+                    <FontAwesomeIcon
+                      icon={faEnvelope}
+                      className="text-white"
+                      size={28}
+                    />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-[#111111] mb-2">
+                      Email
+                    </h3>
+                    <a href="mailto:loagomoremi@gmail.com">
+                      <p className="text-[#727272]" id="email-text">
+                        loagomoremi@gmail.com
+                      </p>
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-center space-y-4">
+                  <div
+                    className="bg-[#111111] p-4 rounded-full"
+                    id="contact-icons"
+                  >
+                    <FontAwesomeIcon icon={faPhone} className="text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-[#111111] mb-2">
+                      Phone
+                    </h3>
+                    <p className="text-[#727272]">+267 76102933</p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-center space-y-4">
+                  <div
+                    className="bg-[#111111] p-4 rounded-full"
+                    id="contact-icons"
+                  >
+                    <FontAwesomeIcon
+                      icon={faLocationPin}
+                      className="text-white"
+                      size={28}
+                    />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-[#111111] mb-2">
+                      Location
+                    </h3>
+                    <p className="text-[#727272]">Francistown, BW</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
 
-      <footer>
-        <div className="bg-[#111111] text-white py-6">
-          <div className="max-w-6xl mx-auto text-center">
-            <p className="text-sm">
-              © {new Date().getFullYear()} Loago Moremi. All rights reserved.
-            </p>
-            <p className="text-sm mt-2">
-              Built with <span className="text-red-500">♥</span> using React.
-            </p>
+      <footer className="bg-[#111111] text-white py-12 min-w-full">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="mb-6 md:mb-0">
+              <a href="#container">
+                <span className="text-xl font-semibold mb-2" id="first-name">
+                  Loago
+                </span>
+                <span className="text-xl font-semibold mb-2" id="last-name">
+                  {" "}
+                  Moremi
+                </span>
+              </a>
+              <p className="text-[#a0a0a0]">Building cool stuff on the web</p>
+            </div>
+
+            <div className="flex items-center space-x-5">
+              <a
+                href="https://github.com/loag0"
+                target="_blank"
+                className="text-[#a0a0a0] hover:text-white transition-colors"
+                id="footer-icons"
+              >
+                <FontAwesomeIcon icon={faGithub} size={20} />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/loago-moremi"
+                target="_blank"
+                className="text-[#a0a0a0] hover:text-white transition-colors"
+                id="footer-icons"
+              >
+                <FontAwesomeIcon icon={faLinkedin} size={20} />
+              </a>
+              <a
+                href="mailto:loagomoremi@gmail.com"
+                className="text-[#a0a0a0] hover:text-white transition-colors"
+                id="footer-icons"
+              >
+                <FontAwesomeIcon icon={faEnvelope} size={20} />
+              </a>
+            </div>
+          </div>
+
+          <div className="border-t border-[#3f3f3f] mt-8 pt-6 text-center">
+            <p className="text-[#a0a0a0] text-sm">© 2024 Loago Moremi.</p>
           </div>
         </div>
       </footer>
