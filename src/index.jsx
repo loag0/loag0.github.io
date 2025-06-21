@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import gsap from "gsap";
 import "./styles/index.css";
 import "animate.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import { faGithub, faLinkedin, faInstagram } from "@fortawesome/free-brands-svg-icons";
 import { faEnvelope, faPhone, faLocationPin } from "@fortawesome/free-solid-svg-icons"
 import { Carousel, CarouselItem } from "./components/Carousel";
 
@@ -64,27 +64,6 @@ export default function Index() {
     };
   }, []);
 
-  {/* Dark Mode Toggle */}
-
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    const savedTheme = document.documentElement.getAttribute("data-theme");
-    if (savedTheme === "dark") {
-      setIsDark(true);
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    const newTheme = !isDark;
-    setIsDark(newTheme);
-
-    document.documentElement.setAttribute(
-      "data-theme",
-      newTheme ? "dark" : "light"
-    );
-
-  };
 
   return (
     <>
@@ -123,9 +102,9 @@ export default function Index() {
           </div>
         </nav>
 
-        {/*Intro Section */}
-        
         <div className="page-container">
+          {/*Intro Section */}
+
           <div className="py-20 px-6 bg-[#f5f5f5] min-h-2xl mx-auto min-w-screen">
             <div className="max-w-6xl mx-auto text-center">
               <h1 className="text-5xl font-bold text-[#111111] mb-6">
@@ -149,10 +128,10 @@ export default function Index() {
               <h2 className="text-4xl font-bold text-[#111111] mb-12 text-center">
                 About Me
               </h2>
-              <div className="grid md:grid cols-2 gap-12 items-center">
+              <div className="grid md:grid-cols-2 gap-20 items-center">
                 <div>
                   <img
-                    src="./src/assets/profile.jpg"
+                    src="./src/assets/profile-v2.jpg"
                     alt="Loago Moremi"
                     className="rounded-full w-64 h-64 mx-auto object-cover shadow-lg"
                     loading="lazy"
@@ -160,16 +139,15 @@ export default function Index() {
                 </div>
                 <div>
                   <p className="text-lg text-[#727272] mb-6 leading-relaxed">
-                    I am a software developer with a passion for creating
-                    innovative solutions. I have experience in various
-                    programming languages and frameworks, and I love to learn
-                    new technologies.
+                    I'm a computer science student with a passion for software
+                    development and a curiosity that keeps me exploring new
+                    tools, languages, and frameworks. I enjoy solving problems
+                    through code and learning by building, even if that means
+                    failing a few times before getting it right.
                   </p>
                   <p className="text-[#727272] text-lg leading-relaxed">
                     I enjoy working on challenging projects that push my limits
-                    and allow me to grow as a developer. In my free time, I
-                    contribute to open-source projects and explore new
-                    programming languages.
+                    and allow me to grow as a developer.
                   </p>
                 </div>
               </div>
@@ -249,16 +227,21 @@ export default function Index() {
 
               <div className="grid md:grid-cols-3 gap-8 max-w-3xl mx-auto">
                 <div className="flex flex-col items-center space-y-4">
-                  <div
-                    className="bg-[#111111] p-4 rounded-full"
-                    id="contact-icons"
+                  <a
+                    className="cursor-pointer"
+                    href="mailto:loagomoremi@gmail.com"
                   >
-                    <FontAwesomeIcon
-                      icon={faEnvelope}
-                      className="text-white"
-                      size={28}
-                    />
-                  </div>
+                    <div
+                      className="bg-[#111111] p-4 rounded-full"
+                      id="contact-icons"
+                    >
+                      <FontAwesomeIcon
+                        icon={faEnvelope}
+                        className="text-white"
+                        size={28}
+                      />
+                    </div>
+                  </a>
                   <div>
                     <h3 className="text-lg font-semibold text-[#111111] mb-2">
                       Email
@@ -350,6 +333,14 @@ export default function Index() {
                 <FontAwesomeIcon icon={faLinkedin} size={20} />
               </a>
               <a
+                href="https://www.instagram.com/_m.loago"
+                target="_blank"
+                className="text-[#a0a0a0] hover:text-white transition-colors"
+                id="footer-icons"
+              >
+                <FontAwesomeIcon icon={faInstagram} size={20} />
+              </a>
+              <a
                 href="mailto:loagomoremi@gmail.com"
                 className="text-[#a0a0a0] hover:text-white transition-colors"
                 id="footer-icons"
@@ -364,42 +355,6 @@ export default function Index() {
           </div>
         </div>
       </footer>
-
-      <button
-        onClick={toggleTheme}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-[#cbcbcb] dark:bg-[#cbcbcb] hover:bg-[#1a1a2c] dark:hover:bg-gray-600 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center z-50 group"
-        aria-label="Toggle dark mode"
-      >
-        {/* Sun Icon for Light Mode */}
-        <svg
-          className={`w-6 h-6 text-yellow-500 transition-all duration-300 ${
-            isDark
-              ? "opacity-0 rotate-180 scale-0"
-              : "opacity-100 rotate-0 scale-100"
-          }`}
-          fill="currentColor"
-          viewBox="0 0 20 20"
-        >
-          <path
-            fillRule="evenodd"
-            d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-            clipRule="evenodd"
-          />
-        </svg>
-
-        {/* Moon Icon for Dark Mode */}
-        <svg
-          className={`w-6 h-6 text-blue-400 absolute transition-all duration-300 ${
-            isDark
-              ? "opacity-100 rotate-0 scale-100"
-              : "opacity-0 rotate-180 scale-0"
-          }`}
-          fill="currentColor"
-          viewBox="0 0 20 20"
-        >
-          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-        </svg>
-      </button>
     </>
   );
 }
