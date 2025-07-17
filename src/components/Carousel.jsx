@@ -4,15 +4,20 @@ const Carousel = ({ children, className = "" }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const containerRef = useRef(null);
 
-  const totalItems = React.Children.count(children);
   const childrenArray = React.Children.toArray(children);
+  const totalItems = childrenArray.length;
 
-  // Create infinite loop by duplicating items
+  // duplicate last 2 and first 2 for infinite effect
   const extendedChildren = [
-    ...childrenArray.slice(-2), // Last 2 items at the beginning
+    childrenArray[totalItems - 2],
+    childrenArray[totalItems - 1],
     ...childrenArray,
-    ...childrenArray.slice(0, 2), // First 2 items at the end
+    childrenArray[0],
+    childrenArray[1],
   ];
+
+  const itemWidth = 100 / 3; // assuming 3 items shown
+  const translateX = -((currentIndex + 2) * itemWidth);
 
   const scrollPrev = () => {
     setCurrentIndex((prev) => (prev - 1 + totalItems) % totalItems);
@@ -22,27 +27,30 @@ const Carousel = ({ children, className = "" }) => {
     setCurrentIndex((prev) => (prev + 1) % totalItems);
   };
 
-  // Calculate the translate position - adding 2 to account for the duplicated items at start
-  const translateX = -((currentIndex + 2) * 33.333333 - 33.333333); // Center the current item
-
   return (
     <div className={`relative ${className}`}>
       <div ref={containerRef} className="overflow-hidden">
         <div
-          className="flex h-full transition-transform duration-300 ease-in-out"
-          style={{ transform: `translateX(${translateX}%)` }}>
-          {extendedChildren.map((child, index) => (
-            <div key={index} className="flex-none w-1/3 px-2">
+          className="flex transition-transform duration-300 ease-in-out"
+          style={{ transform: `translateX(${translateX}%)` }}
+        >
+          {extendedChildren.map((child, idx) => (
+            <div
+              key={idx}
+              className="flex-none w-1/3 px-2"
+              style={{ userSelect: "none" }}
+            >
               {child}
             </div>
           ))}
         </div>
       </div>
 
-      {/* Navigation buttons - no disabled state since it loops */}
+      {/* Nav buttons */}
       <button
         onClick={scrollPrev}
         className="absolute left-4 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 transition-colors z-10 cursor-pointer"
+        aria-label="Previous"
       >
         <svg
           className="w-4 h-4 text-gray-700"
@@ -61,7 +69,8 @@ const Carousel = ({ children, className = "" }) => {
 
       <button
         onClick={scrollNext}
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 transition-colors z-10 cursor-pointer" 
+        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 transition-colors z-10 cursor-pointer"
+        aria-label="Next"
       >
         <svg
           className="w-4 h-4 text-gray-700"
@@ -82,15 +91,16 @@ const Carousel = ({ children, className = "" }) => {
       <div className="absolute inset-y-0 left-0 w-15 bg-gradient-to-r from-white to-transparent pointer-events-none z-10"></div>
       <div className="absolute inset-y-0 right-0 w-15 bg-gradient-to-l from-white to-transparent pointer-events-none z-10"></div>
 
-      {/* Dots indicator */}
+      {/* Dots */}
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-        {Array.from({ length: totalItems }).map((_, index) => (
+        {Array.from({ length: totalItems }).map((_, idx) => (
           <button
-            key={index}
-            onClick={() => setCurrentIndex(index)}
+            key={idx}
+            onClick={() => setCurrentIndex(idx)}
             className={`w-2 h-2 rounded-full transition-colors ${
-              index === currentIndex ? "bg-gray-800" : "bg-gray-400"
+              idx === currentIndex ? "bg-gray-800" : "bg-gray-400"
             }`}
+            aria-label={`Go to slide ${idx + 1}`}
           />
         ))}
       </div>

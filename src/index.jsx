@@ -2,7 +2,7 @@ import "./styles/index.css";
 import "animate.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faLinkedin, faInstagram } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope, faPhone, faLocationPin } from "@fortawesome/free-solid-svg-icons"
+import { faEnvelope, faLocationPin } from "@fortawesome/free-solid-svg-icons"
 import { Carousel, CarouselItem } from "./components/Carousel";
 
 export default function Index() {
@@ -12,24 +12,24 @@ export default function Index() {
       id: 1,
       title: "MediFind",
       description: "A web and mobile app that users can use to find medical professionals.",
-      image: "/src/assets/react-placeholder.jpg",
-      tech: ["React, Node.js, Firebase, Expo"],
+      image: "/src/assets/medifind.png",
+      tech: ["React", "Firebase", "Expo"],
       link: "github.com/loag0/MediFind",
     },
     {
       id: 2,
       title: "MechConnect",
       description: "A platform for employees to view training videos, attempt quizzes and earn certificates.",
-      image: "/src/assets/react-placeholder.jpg",
-      tech: ["React, Node.js, Firebase"],
+      image: "/src/assets/mechconnect.png",
+      tech: ["React", "Firebase"],
       link: "github.com/loag0/MechConnect",
     },
     {
       id: 3,
       title: "FieldSet Devices",
       description: "A basic front-end website about a fictional company that sells smartphones.",
-      image: "/src/assets/react-placeholder.jpg",
-      tech: ["HTML, CSS, JavaScript"],
+      image: "/src/assets/blue-lock.png",
+      tech: ["HTML", "CSS", "JavaScript"],
       link: "github.com/loag0/FieldSet-Devices",
     },
   ];
@@ -72,6 +72,7 @@ export default function Index() {
         </nav>
 
         <div className="page-container">
+
           {/*Intro Section */}
 
           <div className="py-20 px-6 bg-[#f5f5f5] min-h-2xl mx-auto min-w-screen">
@@ -79,13 +80,9 @@ export default function Index() {
               <h1 className="text-5xl font-bold text-[#111111] mb-6">
                 Hello, I'm <span className="text-[#3f3f3f]">Loago Moremi</span>
               </h1>
-              <p className="text-xl text-[#727272] mb-8 max-w-4xl mx-auto">
-                I'm a Computer Science student with a strong passion for
-                front-end development and creative design. I enjoy building
-                clean, responsive web interfaces and continuously exploring new
-                technologies to improve my skills. I'm driven, curious, and
-                committed to crafting digital experiences that are both
-                functional and visually engaging."
+              <p className="text-xl text-[#727272] max-w-4xl mx-auto">
+                Computer Science student passionate about front-end dev and
+                clean design.
               </p>
             </div>
           </div>
@@ -108,7 +105,7 @@ export default function Index() {
                 </div>
                 <div>
                   <p className="text-lg text-[#727272] mb-6 leading-relaxed">
-                    I'm a computer science student with a passion for software
+                    I have a passion for software
                     development and a curiosity that keeps me exploring new
                     tools, languages, and frameworks. I enjoy solving problems
                     through code and learning by building, even if that means
@@ -183,9 +180,49 @@ export default function Index() {
             </div>
           </section>
 
+          {/* Experience Section */}
+
+          <section id="experience" className="py-20 px-6 bg-white">
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-4xl font-bold text-[#111111] text-center mb-12">
+                Experience
+              </h2>
+
+              <div className="bg-[#f5f5f5] p-6 rounded-lg shadow-sm flex flex-col md:flex-row gap-6 items-start md:items-center">
+                <img
+                  src="/src/assets/debswana.jpg"
+                  alt="Debswana Logo"
+                  className="w-16 h-16 object-contain"
+                />
+                <div>
+                  <h3 className="text-2xl font-semibold text-[#111111] mb-1">
+                    IT Attaché – Debswana Mining Company
+                  </h3>
+                  <p className="text-[#727272] italic mb-2">
+                    June 2025 – July 2025
+                  </p>
+                  <ul className="list-disc pl-5 text-[#727272] space-y-1">
+                    <li>
+                      Provided end-user technical support and handled
+                      troubleshooting tasks
+                    </li>
+                    <li>
+                      Assisted in deploying and maintaining enterprise software
+                      systems
+                    </li>
+                    <li>
+                      Worked closely with the IT team to support domain/network
+                      configurations
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/*Contact Section */}
 
-          <section id="contact" className="py-20 px-6">
+          <section id="contact" className="py-20 px-6 bg-[#f0f0f0]">
             <div className="max-w-4xl mx-auto text-center">
               <h2 className="text-4xl font-bold text-[#111111] mb-4">
                 Let's Work Together
@@ -194,7 +231,7 @@ export default function Index() {
                 Got a project in mind? I'd love to hear about it.{" "}
               </p>
 
-              <div className="grid md:grid-cols-3 gap-8 max-w-3xl mx-auto">
+              <div className="grid md:grid-cols-2 gap-2 max-w-2xl mx-auto">
                 <div className="flex flex-col items-center space-y-4">
                   <a
                     className="cursor-pointer"
@@ -228,21 +265,6 @@ export default function Index() {
                     className="bg-[#111111] p-4 rounded-full"
                     id="contact-icons"
                   >
-                    <FontAwesomeIcon icon={faPhone} className="text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-[#111111] mb-2">
-                      Phone
-                    </h3>
-                    <p className="text-[#727272]">+267 76102933</p>
-                  </div>
-                </div>
-
-                <div className="flex flex-col items-center space-y-4">
-                  <div
-                    className="bg-[#111111] p-4 rounded-full"
-                    id="contact-icons"
-                  >
                     <FontAwesomeIcon
                       icon={faLocationPin}
                       className="text-white"
@@ -262,7 +284,7 @@ export default function Index() {
         </div>
       </div>
 
-      <footer className="bg-[#111111] text-white py-12 min-w-full">
+      <footer className="bg-[#111111] text-white py-12 w-screen self-stretch">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-6 md:mb-0">
