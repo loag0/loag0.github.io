@@ -12,7 +12,7 @@ export default function Index() {
       id: 1,
       title: "MediFind",
       description: "A web and mobile app that users can use to find medical professionals.",
-      image: "/src/assets/medifind.png",
+      image: "/assets/medifind.png",
       tech: ["React", "Firebase", "Expo"],
       link: "github.com/loag0/MediFind",
     },
@@ -20,7 +20,7 @@ export default function Index() {
       id: 2,
       title: "MechConnect",
       description: "A platform for employees to view training videos, attempt quizzes and earn certificates.",
-      image: "/src/assets/mechconnect.png",
+      image: "/assets/mechconnect.png",
       tech: ["React", "Firebase"],
       link: "github.com/loag0/MechConnect",
     },
@@ -28,7 +28,7 @@ export default function Index() {
       id: 3,
       title: "FieldSet Devices",
       description: "A basic front-end website about a fictional company that sells smartphones.",
-      image: "/src/assets/blue-lock.png",
+      image: "/assets/blue-lock.png",
       tech: ["HTML", "CSS", "JavaScript"],
       link: "github.com/loag0/FieldSet-Devices",
     },
@@ -97,7 +97,7 @@ export default function Index() {
               <div className="grid md:grid-cols-2 gap-20 items-center">
                 <div>
                   <img
-                    src="./src/assets/profile-v2.jpg"
+                    src="/assets/profile-v2.jpg"
                     alt="Loago Moremi"
                     className="rounded-full w-64 h-64 mx-auto object-cover shadow-lg"
                     loading="lazy"
@@ -190,7 +190,7 @@ export default function Index() {
 
               <div className="bg-[#f5f5f5] p-6 rounded-lg shadow-sm flex flex-col md:flex-row gap-6 items-start md:items-center">
                 <img
-                  src="/src/assets/debswana.jpg"
+                  src="/assets/debswana.jpg"
                   alt="Debswana Logo"
                   className="w-16 h-16 object-contain"
                 />
