@@ -1,12 +1,47 @@
-# React + Vite
+# Personal Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is my personal portfolio website, developed to showcase my projects, experience, and provide a way for people to get in touch with me. It includes a brief "About Me" section, along with highlights of my work and professional background.
 
-Currently, two official plugins are available:
+## 🚀 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The portfolio is hosted on GitHub Pages:  
+[https://your-github-username.github.io/your-repo-name](https://your-github-username.github.io/your-repo-name)  
+_(Replace the link above with your actual deployment URL)_
 
-## Expanding the ESLint configuration
+## 🛠️ Built With
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **React** – Component-based UI development
+- **Tailwind CSS** – Utility-first CSS framework for rapid UI styling
+- **CSS** – For additional custom styling
+- **Animate.css** – Predefined CSS animations for added visual appeal
+- **FontAwesome** – Icon library used throughout the site
+
+## 📌 Features
+
+- **About Me** – Short personal introduction
+- **Projects** – A showcase of selected work
+- **Experience** – Relevant background and skills
+- **Contact** – A section to reach out via email or other platforms
+
+## 📱 Responsive Design
+
+Mobile responsiveness is in progress and will be implemented soon.
+
+## 📦 Installation & Setup Instructions
+
+To run this project locally:
+
+### Clone the repository
+    ```bash
+    git clone https://github.com/your-username/your-repo-name.git
+    cd your-repo-name
+    npm install
+    npm run dev
+    ```
+--
+## 🙏 Acknowledgements
+    FontAwesome for the icon set
+    Animate.css for easy-to-use CSS animations
+
+
+

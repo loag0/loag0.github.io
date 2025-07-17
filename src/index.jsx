@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import gsap from "gsap";
 import "./styles/index.css";
 import "animate.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -35,35 +33,6 @@ export default function Index() {
       link: "github.com/loag0/FieldSet-Devices",
     },
   ];
-
-  useEffect(() => {
-    const first = document.getElementById("first-name");
-    const last = document.getElementById("last-name");
-
-    const bounce = (el) => {
-      gsap.to(el, {
-        y: -10,
-        duration: 0.2,
-        ease: "power1.out",
-        onComplete: () => {
-          gsap.to(el, {
-            y: 0,
-            duration: 0.4,
-            ease: "bounce.out",
-          });
-        },
-      });
-    };
-
-    first.addEventListener("mouseenter", () => bounce(first));
-    last.addEventListener("mouseenter", () => bounce(last));
-
-    return () => {
-      first.removeEventListener("mouseenter", () => bounce(first));
-      last.removeEventListener("mouseenter", () => bounce(last));
-    };
-  }, []);
-
 
   return (
     <>
