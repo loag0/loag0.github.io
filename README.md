@@ -1,41 +1,41 @@
 # Personal Portfolio
 
-A sleek, responsive developer portfolio built with React, TypeScript, and Tailwind CSS — designed to showcase my work, experience, and provide a simple way to connect.
+A sleek, responsive developer portfolio designed to showcase my work, experience, and provide a simple way to connect.
 
-## 🚀 Live Demo
-🔗 [https://loag0.github.io](https://loag0.github.io) 
+## Tech Stack
 
-## 🛠️ Built With
+<img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
+<img src="https://img.shields.io/badge/JavaScript-000000?style=for-the-badge&logo=javascript&logoColor=F7DF1E" />
+<img src="https://img.shields.io/badge/HTML5-000000?style=for-the-badge&logo=html5&logoColor=E34F26" />
+<img src="https://img.shields.io/badge/CSS3-000000?style=for-the-badge&logo=css3&logoColor=1572B6" />
+<img src="https://img.shields.io/badge/Font%20Awesome-000000?style=for-the-badge&logo=fontawesome&logoColor=339AF0" />
+<img src="https://img.shields.io/badge/GSAP-000000?style=for-the-badge&logo=greensock&logoColor=88CE02" />
+
+## Live Demo
+
+[Check it out here!](https://loag0.github.io)
+
+## Built With
 
 - **React** – Component-based UI development
 - **Vite** – Fast frontend tooling for development and build
 - **Tailwind CSS** – Utility-first CSS framework for rapid UI styling
 - **CSS** – For additional custom styling
-- **Animate.css** – Predefined CSS animations for added visual appeal
+- **GSAP** – Javascript animation library
 - **FontAwesome** – Icon library used throughout the site
 
-## 📌 Features
+## Features
 
 - **About Me** – Short personal introduction
+- **Skills** – A showcase of my technical skills
 - **Projects** – A showcase of selected work
 - **Experience** – Relevant background and skills
 - **Contact** – A section to reach out via email or other platforms
 
-## 🧑‍💻 Getting started
+## Acknowledgements
 
-To run this project locally:
-
-### Clone the repository
-```bash
-git clone https://github.com/loag0/loag0.github.io.git
-cd loag0.github.io
-npm install
-npm run dev
-```
-## 🙏 Acknowledgements
 - FontAwesome for the icon set
-- Animate.css for easy-to-use CSS animations
-- Instagram, for putting me onto these libraries 
 
+- GSAP for the animation library
 
-
+- Instagram, for putting me onto these libraries
