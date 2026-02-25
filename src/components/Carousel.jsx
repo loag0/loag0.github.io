@@ -1,44 +1,58 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 
-const Carousel = ({ children, className = "" }) => {
+/**
+ * Adaptive Carousel / Grid component.
+ *
+ * When the number of children is ≤ `threshold` (default 3),
+ * renders items in a flat CSS grid. When children exceed the
+ * threshold, renders a sliding carousel with navigation.
+ *
+ * @param {number}  threshold   – max items before switching to carousel (default 3)
+ * @param {number}  visibleCount – items visible per slide in carousel mode (default 2)
+ * @param {string}  className   – additional wrapper class
+ */
+const Carousel = ({
+  children,
+  className = "",
+  threshold = 3,
+  visibleCount = 2,
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const containerRef = useRef(null);
-
   const childrenArray = React.Children.toArray(children);
   const totalItems = childrenArray.length;
 
-  // duplicate last 2 and first 2 for infinite effect
-  const extendedChildren = [
-    childrenArray[totalItems - 2],
-    childrenArray[totalItems - 1],
-    ...childrenArray,
-    childrenArray[0],
-    childrenArray[1],
-  ];
+  const isCarousel = totalItems > threshold;
 
-  const itemWidth = 100 / 3; // assuming 3 items shown
-  const translateX = -((currentIndex + 2) * itemWidth);
+  /* ── Grid mode ── */
+  if (!isCarousel) {
+    return <div className={`projects-grid ${className}`}>{childrenArray}</div>;
+  }
+
+  /* ── Carousel mode ── */
+  const slideWidth = 100 / visibleCount;
+  const maxIndex = totalItems - visibleCount;
+  const translateX = -(currentIndex * slideWidth);
 
   const scrollPrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + totalItems) % totalItems);
+    setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
   };
 
   const scrollNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % totalItems);
+    setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
   };
 
   return (
-    <div className={`relative ${className}`}>
-      <div ref={containerRef} className="overflow-hidden">
+    <div className={`carousel-wrapper ${className}`}>
+      <div className="carousel-track-container">
         <div
-          className="flex transition-transform duration-300 ease-in-out"
+          className="carousel-track"
           style={{ transform: `translateX(${translateX}%)` }}
         >
-          {extendedChildren.map((child, idx) => (
+          {childrenArray.map((child, idx) => (
             <div
               key={idx}
-              className="flex-none w-1/3 px-2"
-              style={{ userSelect: "none" }}
+              className="carousel-slide"
+              style={{ flex: `0 0 ${slideWidth}%` }}
             >
               {child}
             </div>
@@ -46,14 +60,15 @@ const Carousel = ({ children, className = "" }) => {
         </div>
       </div>
 
-      {/* Nav buttons */}
+      {/* Navigation buttons */}
       <button
         onClick={scrollPrev}
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 transition-colors z-10 cursor-pointer"
+        className="carousel-btn carousel-btn--prev"
         aria-label="Previous"
       >
         <svg
-          className="w-4 h-4 text-gray-700"
+          width="16"
+          height="16"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -69,11 +84,12 @@ const Carousel = ({ children, className = "" }) => {
 
       <button
         onClick={scrollNext}
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 transition-colors z-10 cursor-pointer"
+        className="carousel-btn carousel-btn--next"
         aria-label="Next"
       >
         <svg
-          className="w-4 h-4 text-gray-700"
+          width="16"
+          height="16"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -87,19 +103,13 @@ const Carousel = ({ children, className = "" }) => {
         </svg>
       </button>
 
-      {/* Blur edges */}
-      <div className="absolute inset-y-0 left-0 w-15 bg-gradient-to-r from-white to-transparent pointer-events-none z-10"></div>
-      <div className="absolute inset-y-0 right-0 w-15 bg-gradient-to-l from-white to-transparent pointer-events-none z-10"></div>
-
-      {/* Dots */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-        {Array.from({ length: totalItems }).map((_, idx) => (
+      {/* Dot indicators */}
+      <div className="carousel-dots">
+        {Array.from({ length: maxIndex + 1 }).map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrentIndex(idx)}
-            className={`w-2 h-2 rounded-full transition-colors ${
-              idx === currentIndex ? "bg-gray-800" : "bg-gray-400"
-            }`}
+            className={`carousel-dot ${idx === currentIndex ? "carousel-dot--active" : ""}`}
             aria-label={`Go to slide ${idx + 1}`}
           />
         ))}
@@ -109,7 +119,7 @@ const Carousel = ({ children, className = "" }) => {
 };
 
 const CarouselItem = ({ children, className = "" }) => {
-  return <div className={`h-full ${className}`}>{children}</div>;
+  return <div className={className}>{children}</div>;
 };
 
 export { Carousel, CarouselItem };

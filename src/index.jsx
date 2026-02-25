@@ -1,351 +1,384 @@
 import "./styles/index.css";
-import "animate.css"
+import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGithub, faLinkedin, faInstagram } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope, faLocationPin } from "@fortawesome/free-solid-svg-icons"
+import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import {
+  faEnvelope,
+  faLocationPin,
+  faDownload,
+} from "@fortawesome/free-solid-svg-icons";
 import { Carousel, CarouselItem } from "./components/Carousel";
+import MobileMenu from "./components/MobileMenu";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Index() {
+  const pageRef = useRef(null);
 
+  /* ── ProjectCard with expand/collapse ── */
+  function ProjectCard({ project }) {
+    const cardRef = useRef(null);
+    const [isOverflowing, setIsOverflowing] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    useEffect(() => {
+      const el = cardRef.current;
+      if (!el) return;
+      // Check if content is clipped by max-height
+      setIsOverflowing(el.scrollHeight > el.clientHeight);
+    }, []);
+
+    return (
+      <div
+        ref={cardRef}
+        className={`project-card ${isExpanded ? "project-card--expanded" : ""}`}
+      >
+        {project.label && (
+          <span className="project-card-label">
+            {project.label}{" "}
+            {project.link && (
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="project-card-link"
+              >
+                <FontAwesomeIcon icon={faGithub} />
+                &nbsp; View on GitHub
+              </a>
+            )}
+          </span>
+        )}
+        <h3 className="project-card-title">{project.title}</h3>
+        <p className="project-card-desc">{project.description}</p>
+        <div className="project-tags">
+          {project.tech.map((tech, index) => (
+            <span key={index} className="project-tag">
+              {tech}
+            </span>
+          ))}
+        </div>
+        {isOverflowing && (
+          <button
+            className="project-card-toggle"
+            onClick={() => setIsExpanded((prev) => !prev)}
+          >
+            {isExpanded ? "Show less" : "Show more"}
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  /* ── GSAP scroll-reveal ── */
+  useEffect(() => {
+    const sections = pageRef.current?.querySelectorAll(".section");
+    if (!sections) return;
+
+    sections.forEach((section) => {
+      gsap.fromTo(
+        section,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 85%",
+            once: true,
+          },
+        },
+      );
+    });
+
+    return () => ScrollTrigger.getAll().forEach((t) => t.kill());
+  }, []);
+
+  /* ── Data ── */
   const projects = [
     {
       id: 1,
-      title: "MediFind",
-      description: "A web and mobile app that users can use to find medical professionals.",
-      image: "/assets/medifind.png",
-      tech: ["React", "Firebase", "Expo"],
-      link: "github.com/loag0/MediFind",
+      title: "copus",
+      description:
+        "A lightweight web app that converts mp3 files to opus and ogg file formats for android notification sound customization and to wav format for windows sound customization.",
+      tech: ["HTML", "CSS", "JavaScript", "ffmpeg", "Multer", "Express"],
+      link: "https://github.com/loag0/copus",
+      label: "Web App",
     },
     {
       id: 2,
-      title: "MechConnect",
-      description: "A platform for employees to view training videos, attempt quizzes and earn certificates.",
-      image: "/assets/mechconnect.png",
-      tech: ["React", "Firebase"],
-      link: "github.com/loag0/MechConnect",
-    },
-    {
-      id: 3,
-      title: "FieldSet Devices",
-      description: "A basic front-end website about a fictional company that sells smartphones.",
-      image: "/assets/blue-lock.png",
-      tech: ["HTML", "CSS", "JavaScript"],
-      link: "github.com/loag0/FieldSet-Devices",
+      title: "brAInwave",
+      description:
+        "An AI-powered study planner that helps students create personalized study plans based on their preferences in order to curb procrastination and poor time management.",
+      tech: ["React", "Firebase", "Expo", "FastAPI", "SQLite"],
+      //link: "https://github.com/loag0/brAInwave",
+      label: "Coming soon",
     },
   ];
 
+  const skills = {
+    Frontend: ["React", "JavaScript", "Typescript", "HTML", "CSS", "Tailwind"],
+    "Backend / Services": ["Firebase", "Node.js", "FastAPI"],
+    Tools: ["Git", "VS Code", "Figma", "Expo"],
+  };
+
+  const scrollToTop = (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
-    <>
-      <div className="container" id="container">
-        <nav className="navbar">
-          <div className="min-w-full mx-auto px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div className="text-2xl font-bold text-[#111111] justify-start px-5">
-                <a
-                  href="/"
-                  onClick={(e) =>
-                    window.scrollTo({ top: 0, behavior: "smooth" }) ||
-                    e.preventDefault()
-                  }
-                >
-                  Loago Moremi
-                </a>
-              </div>
+    <div className="site-wrapper" ref={pageRef}>
+      {/* ── Navbar ── */}
+      <nav className="navbar">
+        <div className="navbar-inner">
+          <a href="/" onClick={scrollToTop} className="navbar-brand">
+            Loago Moremi
+          </a>
 
-              <div className="links-container">
-                <a href="#about">About</a>
-                <a href="#projects">Projects</a>
-                <a href="#experience">Experience</a>
-                <a href="#contact">Contact</a>
-                <a href="https://github.com/loag0" target="_blank">
-                  <FontAwesomeIcon icon={faGithub} />
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/loago-moremi"
-                  target="_blank"
-                >
-                  <FontAwesomeIcon icon={faLinkedin} />
-                </a>
-              </div>
-            </div>
-          </div>
-        </nav>
-
-        <div className="page-container">
-
-          {/*Intro Section */}
-
-          <div className="py-20 px-6 bg-[#f5f5f5] min-h-2xl mx-auto min-w-screen">
-            <div className="max-w-6xl mx-auto text-center">
-              <h1 className="text-5xl font-bold text-[#111111] mb-6">
-                Hello, I'm <span className="text-[#3f3f3f]">Loago Moremi</span>
-              </h1>
-              <p className="text-xl text-[#727272] max-w-4xl mx-auto">
-                Computer Science student passionate about front-end dev and
-                clean design.
-              </p>
-            </div>
+          <div className="navbar-links">
+            <a href="#about">About</a>
+            <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
+            <a href="#experience">Experience</a>
+            <a href="#contact">Contact</a>
+            <a
+              href="https://github.com/loag0"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="nav-icon"
+              aria-label="GitHub"
+            >
+              <FontAwesomeIcon icon={faGithub} />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/loago-moremi"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="nav-icon"
+              aria-label="LinkedIn"
+            >
+              <FontAwesomeIcon icon={faLinkedin} />
+            </a>
           </div>
 
-          {/* About Section */}
+          <MobileMenu />
+        </div>
+      </nav>
 
-          <div className="py-20 px-6" id="about">
-            <div className="max-w-6xl mx-auto">
-              <h2 className="text-4xl font-bold text-[#111111] mb-12 text-center">
-                About Me
-              </h2>
-              <div className="grid md:grid-cols-2 gap-20 items-center">
-                <div>
-                  <img
-                    src="/assets/profile-v2.jpg"
-                    alt="Loago Moremi"
-                    className="rounded-full w-64 h-64 mx-auto object-cover shadow-lg"
-                    loading="lazy"
-                  />
-                </div>
-                <div>
-                  <p className="text-lg text-[#727272] mb-6 leading-relaxed">
-                    I have a passion for software
-                    development and a curiosity that keeps me exploring new
-                    tools, languages, and frameworks. I enjoy solving problems
-                    through code and learning by building, even if that means
-                    failing a few times before getting it right.
-                  </p>
-                  <p className="text-[#727272] text-lg leading-relaxed">
-                    I enjoy working on challenging projects that push my limits
-                    and allow me to grow as a developer.
-                  </p>
-                </div>
-              </div>
+      <div className="page-container">
+        {/* ── Hero ── */}
+        <section className="hero">
+          <div className="hero-inner">
+            <div className="status-badge">
+              <span className="status-dot" />
+              Open to opportunities
             </div>
+
+            <h1>
+              Hello, I'm <span className="accent">Loago Moremi</span>
+            </h1>
+            <p className="subtitle">
+              Computer Science student passionate about front-end dev and clean
+              design.
+            </p>
+
+            <a
+              href="/assets/Loago_Moremi - CV.pdf"
+              download
+              className="btn btn-filled"
+            >
+              <FontAwesomeIcon icon={faDownload} />
+              &nbsp; Download CV
+            </a>
           </div>
+        </section>
 
-          {/*Projects Section */}
-
-          <section id="projects" className="py-20 px-6 bg-[#f0f0f0]">
-            <div className="max-w-6xl mx-auto">
-              <h2 className="text-4xl font-bold text-[#111111] text-center mb-12">
-                Projects
-              </h2>
-              <div className="relative">
-                <Carousel className="w-full max-w-5xl mx-auto">
-                  {projects.map((project) => (
-                    <CarouselItem key={project.id}>
-                      <div className="project-card group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 mr-4 relative">
-                        <img
-                          src={project.image}
-                          alt={project.title}
-                          className="w-full h-48 object-cover"
-                        />
-                        <div className="p-6">
-                          <h3 className="text-xl font-semibold text-[#111111] mb-2">
-                            {project.title}
-                          </h3>
-                          <p className="text-[#727272] mb-4">
-                            {project.description}
-                          </p>
-
-                          <div className="flex flex-wrap gap-2 mb-4">
-                            {project.tech.map((tech, index) => (
-                              <span
-                                key={index}
-                                className="px-3 py-1 bg-[#cbcbcb] text-[#3f3f3f] rounded-full text-sm"
-                              >
-                                {tech}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* overlay for darkening bg */}
-                        <div className="card-overlay"></div>
-
-                        {/* centered github icon */}
-                        <a
-                          href={"https://" + project.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="github-overlay"
-                        >
-                          <FontAwesomeIcon
-                            icon={faGithub}
-                            className="text-black text-4xl"
-                          />
-                        </a>
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </Carousel>
-              </div>
-            </div>
-          </section>
-
-          {/* Experience Section */}
-
-          <section id="experience" className="py-20 px-6 bg-white">
-            <div className="max-w-6xl mx-auto">
-              <h2 className="text-4xl font-bold text-[#111111] text-center mb-12">
-                Experience
-              </h2>
-
-              <div className="bg-[#f5f5f5] p-6 rounded-lg shadow-sm flex flex-col md:flex-row gap-6 items-start md:items-center">
+        {/* ── About ── */}
+        <section id="about" className="section about">
+          <div className="section-inner">
+            <h2 className="section-title">About Me</h2>
+            <div className="about-grid">
+              <div className="profile-image-wrapper">
                 <img
-                  src="/assets/debswana.jpg"
-                  alt="Debswana Logo"
-                  className="w-16 h-16 object-contain"
+                  src="/assets/profile-v2.jpg"
+                  alt="Loago Moremi"
+                  loading="lazy"
                 />
-                <div>
-                  <h3 className="text-2xl font-semibold text-[#111111] mb-1">
-                    IT Attaché – Debswana Mining Company
-                  </h3>
-                  <p className="text-[#727272] italic mb-2">
-                    June 2025 – July 2025
-                  </p>
-                  <ul className="list-disc pl-5 text-[#727272] space-y-1">
-                    <li>
-                      Provided end-user technical support and handled
-                      troubleshooting tasks
-                    </li>
-                    <li>
-                      Assisted in deploying and maintaining enterprise software
-                      systems
-                    </li>
-                    <li>
-                      Worked closely with the IT team to support domain/network
-                      configurations
-                    </li>
-                  </ul>
-                </div>
+              </div>
+              <div className="about-text">
+                <p>
+                  I have a passion for software development and a curiosity that
+                  keeps me exploring new tools, languages, and frameworks. I
+                  enjoy solving problems through code and learning by building,
+                  even if that means failing a few times before getting it
+                  right.
+                </p>
+                <p>
+                  I enjoy working on challenging projects that push my limits
+                  and allow me to grow as a developer.
+                </p>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          {/*Contact Section */}
+        {/* ── Skills ── */}
+        <section id="skills" className="section skills">
+          <div className="section-inner">
+            <h2 className="section-title">Skills</h2>
+            <div className="skills-grid">
+              {Object.entries(skills).map(([category, items]) => (
+                <div key={category} className="skills-category">
+                  <h3 className="skills-category-title">{category}</h3>
+                  <div className="skills-tags">
+                    {items.map((skill) => (
+                      <span key={skill} className="skill-tag">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-          <section id="contact" className="py-20 px-6 bg-[#f0f0f0]">
-            <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-4xl font-bold text-[#111111] mb-4">
-                Let's Work Together
-              </h2>
-              <p className="text-1xl text-[#727272] mb-16 max-w-2xl mx-auto">
-                Got a project in mind? I'd love to hear about it.{" "}
+        {/* ── Projects ── */}
+        <section id="projects" className="section projects">
+          <div className="section-inner">
+            <h2 className="section-title">Projects</h2>
+
+            <Carousel threshold={3}>
+              {projects.map((project) => (
+                <CarouselItem key={project.id}>
+                  <ProjectCard project={project} />
+                </CarouselItem>
+              ))}
+            </Carousel>
+          </div>
+        </section>
+
+        {/* ── Experience ── */}
+        <section id="experience" className="section experience">
+          <div className="section-inner">
+            <h2 className="section-title">Experience</h2>
+
+            <div className="experience-card">
+              <img
+                src="/assets/debswana.jpg"
+                alt="Debswana Logo"
+                className="experience-logo"
+                loading="lazy"
+              />
+              <div className="experience-content">
+                <h3>IT Attaché – Debswana Mining Company</h3>
+                <p className="experience-date">June 2025 – July 2025</p>
+                <ul>
+                  <li>
+                    Provided end-user technical support and handled
+                    troubleshooting tasks
+                  </li>
+                  <li>
+                    Assisted in deploying and maintaining enterprise software
+                    systems
+                  </li>
+                  <li>
+                    Worked closely with the IT team to support domain/network
+                    configurations
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Contact ── */}
+        <section id="contact" className="section contact">
+          <div className="section-inner">
+            <div className="contact-inner">
+              <h2 className="section-title">Let's Work Together</h2>
+              <p className="contact-subtitle">
+                Got a project in mind? I'd love to hear about it. Reach out via
+                email or find me on my socials.
               </p>
 
-              <div className="grid md:grid-cols-2 gap-2 max-w-2xl mx-auto">
-                <div className="flex flex-col items-center space-y-4">
-                  <a
-                    className="cursor-pointer"
-                    href="mailto:loagomoremi@gmail.com"
-                  >
-                    <div
-                      className="bg-[#111111] p-4 rounded-full"
-                      id="contact-icons"
-                    >
-                      <FontAwesomeIcon
-                        icon={faEnvelope}
-                        className="text-white"
-                        size={28}
-                      />
+              <div className="contact-grid">
+                <div className="contact-item">
+                  <a href="mailto:loagomoremi@gmail.com" aria-label="Email">
+                    <div className="contact-icon">
+                      <FontAwesomeIcon icon={faEnvelope} />
                     </div>
                   </a>
                   <div>
-                    <h3 className="text-lg font-semibold text-[#111111] mb-2">
-                      Email
-                    </h3>
+                    <h3>Email</h3>
                     <a href="mailto:loagomoremi@gmail.com">
-                      <p className="text-[#727272]" id="email-text">
-                        loagomoremi@gmail.com
-                      </p>
+                      loagomoremi@gmail.com
                     </a>
                   </div>
                 </div>
 
-                <div className="flex flex-col items-center space-y-4">
-                  <div
-                    className="bg-[#111111] p-4 rounded-full"
-                    id="contact-icons"
-                  >
-                    <FontAwesomeIcon
-                      icon={faLocationPin}
-                      className="text-white"
-                      size={28}
-                    />
+                <div className="contact-item">
+                  <div className="contact-icon">
+                    <FontAwesomeIcon icon={faLocationPin} />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-[#111111] mb-2">
-                      Location
-                    </h3>
-                    <p className="text-[#727272]">Francistown, BW</p>
+                    <h3>Location</h3>
+                    <p>Francistown, BW</p>
                   </div>
                 </div>
               </div>
             </div>
-          </section>
-        </div>
+          </div>
+        </section>
       </div>
 
-      <footer className="bg-[#111111] text-white py-12 w-screen self-stretch">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="mb-6 md:mb-0">
-              <a
-                href="/"
-                onClick={(e) =>
-                  window.scrollTo({ top: 0, behavior: "smooth" }) ||
-                  e.preventDefault()
-                }
-              >
-                <span className="text-xl font-semibold mb-2" id="first-name">
-                  Loago
-                </span>
-                <span className="text-xl font-semibold mb-2" id="last-name">
-                  {" "}
-                  Moremi
-                </span>
+      {/* ── Footer ── */}
+      <footer className="site-footer">
+        <div className="footer-inner">
+          <div className="footer-top">
+            <div>
+              <a href="/" onClick={scrollToTop} className="footer-brand">
+                Loago Moremi
               </a>
-              <p className="text-[#a0a0a0]">Building cool stuff on the web</p>
+              <p className="footer-tagline">Building cool stuff on the web</p>
             </div>
 
-            <div className="flex items-center space-x-5">
+            <div className="footer-links">
               <a
                 href="https://github.com/loag0"
                 target="_blank"
-                className="text-[#a0a0a0] hover:text-white transition-colors"
-                id="footer-icons"
+                rel="noopener noreferrer"
               >
-                <FontAwesomeIcon icon={faGithub} size={20} />
+                Github
               </a>
               <a
                 href="https://www.linkedin.com/in/loago-moremi"
                 target="_blank"
-                className="text-[#a0a0a0] hover:text-white transition-colors"
-                id="footer-icons"
+                rel="noopener noreferrer"
               >
-                <FontAwesomeIcon icon={faLinkedin} size={20} />
+                Linkedin
               </a>
               <a
                 href="https://www.instagram.com/_m.loago"
                 target="_blank"
-                className="text-[#a0a0a0] hover:text-white transition-colors"
-                id="footer-icons"
+                rel="noopener noreferrer"
               >
-                <FontAwesomeIcon icon={faInstagram} size={20} />
+                Instagram
               </a>
-              <a
-                href="mailto:loagomoremi@gmail.com"
-                className="text-[#a0a0a0] hover:text-white transition-colors"
-                id="footer-icons"
-              >
-                <FontAwesomeIcon icon={faEnvelope} size={20} />
-              </a>
+              <a href="mailto:loagomoremi@gmail.com">Email</a>
             </div>
           </div>
 
-          <div className="border-t border-[#3f3f3f] mt-8 pt-6 text-center">
-            <p className="text-[#a0a0a0] text-sm">© 2024 Loago Moremi.</p>
+          <div className="footer-bottom">
+            <p>© 2025 Loago Moremi. Developer with Precision.</p>
           </div>
         </div>
       </footer>
-    </>
+    </div>
   );
 }
