@@ -1,5 +1,7 @@
 export const skills = {
-  Frontend: ["React", "JavaScript", "Typescript", "HTML", "CSS", "Tailwind"],
-  "Backend / Services": ["Firebase", "Node.js", "FastAPI"],
-  Tools: ["Git", "VS Code", "Figma", "Expo"],
+  Languages: ["Python", "JavaScript", "Typescript", "HTML", "CSS3"],
+  Frameworks: ["React", "React Native", "Expo", "FastAPI", "Node.js"],
+  Databases: ["Firebase", "Supabase", "SQLite", "Railway"],
+  Tools: ["Git", "VS Code", "Figma", "Android Studio", "Render"],
+  Enterprise: ["Active Directory", "Microsoft Intune", "VMware vCenter", "Azure (fundamentals)"]
 };
