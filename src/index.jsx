@@ -10,204 +10,15 @@ import {
 import { projects } from "./data/projects";
 import { skills } from "./data/skills";
 import { experience } from "./data/experience";
-
-const StartLogo = () => (
-  <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-    {/* Wavy flag — perspective converges upper-right, outer edges curve outward */}
-    <path
-      d="M0.8 2.2 C2 0.8, 5.2 0.8, 6.8 1.4 C7 2, 7 4.8, 6.8 7 C5 6.8, 1.8 7.2, 0.6 7.5 Z"
-      fill="#e83820"
-    />
-    <path
-      d="M7.5 1.1 C9.8 0.3, 12.8 0.2, 14.8 0.7 L14.5 6.8 L7.5 7 Z"
-      fill="#7ab800"
-    />
-    <path
-      d="M0.6 7.8 C1.8 7.5, 5 7.8, 6.8 7.8 C7 10, 6.8 13.5, 6.8 14.6 C5 14.2, 1.8 14.4, 0.8 13.2 Z"
-      fill="#00a0ee"
-    />
-    <path
-      d="M7.5 7.8 L14.5 7.5 L14.5 14.2 C12.5 15, 9.8 15.2, 7.5 14.8 Z"
-      fill="#f8b000"
-    />
-  </svg>
-);
-
-/* IE8: blue globe + white latitude/longitude lines + orange orbital ring + "e" */
-const QuickIEIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-    <circle cx="10" cy="10" r="8.5" fill="#1565c8" />
-    <circle cx="10" cy="10" r="8.5" fill="url(#ieSphere)" opacity="0.4" />
-    {/* globe lines */}
-    <ellipse
-      cx="10"
-      cy="10"
-      rx="8.5"
-      ry="4.2"
-      fill="none"
-      stroke="rgba(160,210,255,0.55)"
-      strokeWidth="0.7"
-    />
-    <ellipse
-      cx="10"
-      cy="10"
-      rx="3.8"
-      ry="8.5"
-      fill="none"
-      stroke="rgba(160,210,255,0.55)"
-      strokeWidth="0.7"
-    />
-    <line
-      x1="1.5"
-      y1="10"
-      x2="18.5"
-      y2="10"
-      stroke="rgba(160,210,255,0.55)"
-      strokeWidth="0.7"
-    />
-    {/* orange orbital ring */}
-    <path
-      d="M 3 5 A 9 9 0 0 1 18 12"
-      stroke="#f09030"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      fill="none"
-    />
-    {/* e letter — three bars */}
-    <path
-      d="M7.5 10.8 Q7.5 8, 10 8 Q12.5 8, 12.5 10.8 L7.5 10.8"
-      stroke="white"
-      strokeWidth="1.1"
-      fill="none"
-      strokeLinecap="round"
-    />
-    <path
-      d="M7.5 10.8 Q7.5 14, 10.5 14 Q12.5 14, 13.2 12.8"
-      stroke="white"
-      strokeWidth="1.1"
-      fill="none"
-      strokeLinecap="round"
-    />
-  </svg>
-);
-
-/* WMP: dark navy disc + orange concentric halo arcs + white play triangle */
-const QuickWMPIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-    <circle cx="10" cy="10" r="9" fill="#0a1a3a" />
-    <circle
-      cx="10"
-      cy="10"
-      r="9"
-      fill="none"
-      stroke="#1a3060"
-      strokeWidth="0.5"
-    />
-    {/* outer orange halo arcs */}
-    <path
-      d="M3.5 10 A6.5 6.5 0 0 1 10 3.5"
-      stroke="#f06810"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      fill="none"
-    />
-    <path
-      d="M10 16.5 A6.5 6.5 0 0 1 3.5 10"
-      stroke="#f06810"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      fill="none"
-    />
-    <path
-      d="M16.5 10 A6.5 6.5 0 0 1 10 16.5"
-      stroke="#e0a020"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      fill="none"
-    />
-    <path
-      d="M10 3.5 A6.5 6.5 0 0 1 16.5 10"
-      stroke="#e0a020"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      fill="none"
-    />
-    {/* inner dark disc */}
-    <circle cx="10" cy="10" r="4.5" fill="#0d2040" />
-    {/* play triangle */}
-    <path d="M8.2 7.8 L13.8 10 L8.2 12.2 Z" fill="white" />
-  </svg>
-);
-
-/* Windows Explorer: yellow folder + blue orbital swoop underneath */
-const QuickExplorerIcon = () => (
-  <svg width="20" height="18" viewBox="0 0 20 18" fill="none">
-    {/* blue orbital band behind folder */}
-    <ellipse
-      cx="10"
-      cy="14"
-      rx="9"
-      ry="2.5"
-      fill="none"
-      stroke="#3a80d0"
-      strokeWidth="1.8"
-      opacity="0.7"
-    />
-    {/* folder body */}
-    <rect x="1" y="5" width="18" height="11" rx="1.5" fill="#e8a820" />
-    <rect x="1" y="7.5" width="18" height="8.5" rx="1.5" fill="#f8c030" />
-    <rect x="1" y="5" width="7.5" height="3.5" rx="1.5" fill="#e8a820" />
-    {/* folder highlight */}
-    <rect
-      x="3"
-      y="9.5"
-      width="14"
-      height="1"
-      rx="0.5"
-      fill="rgba(255,255,255,0.3)"
-    />
-  </svg>
-);
-
-/* Show Desktop: tiny desktop/screen icon */
-const ShowDesktopIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-    <rect
-      x="1"
-      y="1.5"
-      width="14"
-      height="10"
-      rx="1"
-      fill="none"
-      stroke="rgba(255,255,255,0.7)"
-      strokeWidth="1.2"
-    />
-    <rect
-      x="1"
-      y="1.5"
-      width="14"
-      height="2"
-      rx="1"
-      fill="rgba(255,255,255,0.3)"
-    />
-    <rect
-      x="5"
-      y="12"
-      width="6"
-      height="1.5"
-      rx="0.5"
-      fill="rgba(255,255,255,0.6)"
-    />
-    <rect
-      x="2.5"
-      y="13.5"
-      width="11"
-      height="1"
-      rx="0.5"
-      fill="rgba(255,255,255,0.5)"
-    />
-  </svg>
-);
+import {
+  QuickExplorerIcon,
+  QuickIEIcon,
+  QuickWMPIcon,
+  PaintIcon,
+  StartLogo,
+  TrayNetworkIcon,
+  TrayVolumeIcon,
+} from "./components/Win7TaskbarIcons";
 
 const SIDEBAR_COMPUTER = [
   {
@@ -356,56 +167,6 @@ const SIDEBAR_COMPUTER = [
     ),
   },
 ];
-
-const TrayVolumeIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-    <path d="M2 5h2l3-3v10l-3-3H2V5z" fill="rgba(255,255,255,0.8)" />
-    <path
-      d="M9 4.5c1.1.8 1.8 2 1.8 3.5s-.7 2.7-1.8 3.5"
-      stroke="rgba(255,255,255,0.8)"
-      strokeWidth="1.2"
-      strokeLinecap="round"
-      fill="none"
-    />
-  </svg>
-);
-
-const TrayNetworkIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-    <rect
-      x="1"
-      y="10"
-      width="2"
-      height="3"
-      rx="0.5"
-      fill="rgba(255,255,255,0.8)"
-    />
-    <rect
-      x="4"
-      y="7.5"
-      width="2"
-      height="5.5"
-      rx="0.5"
-      fill="rgba(255,255,255,0.8)"
-    />
-    <rect
-      x="7"
-      y="5"
-      width="2"
-      height="8"
-      rx="0.5"
-      fill="rgba(255,255,255,0.8)"
-    />
-    <rect
-      x="10"
-      y="2"
-      width="2"
-      height="11"
-      rx="0.5"
-      fill="rgba(255,255,255,0.8)"
-    />
-  </svg>
-);
 
 const FAVORITE_LINKS = [
   {
@@ -643,7 +404,20 @@ function AboutPane() {
       <div className="pane-content">
         <div className="about-layout">
           <div className="about-photo-wrap">
-            <img src="/assets/profile.jpg" alt="Loago Moremi" loading="lazy" />
+            <picture>
+              <source
+                type="image/webp"
+                srcSet="/assets/profile-360.webp 360w, /assets/profile-720.webp 720w"
+                sizes="(max-width: 768px) 140px, 180px"
+              />
+              <img
+                src="/assets/profile-360.webp"
+                alt="Loago Moremi"
+                width="180"
+                height="240"
+                fetchPriority="high"
+              />
+            </picture>
             <p className="about-photo-caption">profile.jpg</p>
           </div>
           <div>
@@ -872,7 +646,7 @@ function ContactPane() {
                   rel="noopener noreferrer"
                   className="contact-value"
                 >
-                  github.com/loag0
+                  loag0
                 </a>
               </div>
             </div>
@@ -888,7 +662,7 @@ function ContactPane() {
                   rel="noopener noreferrer"
                   className="contact-value"
                 >
-                  linkedin.com/in/loago-moremi
+                  Loago Moremi
                 </a>
               </div>
             </div>
@@ -931,28 +705,21 @@ function Taskbar({ clockTime, clockDate }) {
           <QuickWMPIcon />
         </button>
         <button
-          className="taskbar-ql-btn"
+          className="taskbar-window-chip taskbar-window-chip--active"
           tabIndex={-1}
-          title="Windows Explorer"
+          title="Loago Moremi - File Explorer"
         >
           <QuickExplorerIcon />
         </button>
         <button
           className="taskbar-ql-btn taskbar-ql-btn--show-desktop"
           tabIndex={-1}
-          title="Show Desktop"
+          title="Microsoft Paint"
         >
-          <ShowDesktopIcon />
+          <PaintIcon />
         </button>
       </div>
       <div className="taskbar-sep-v" />
-      <button
-        className="taskbar-window-chip taskbar-window-chip--active"
-        tabIndex={-1}
-        title="Loago Moremi - File Explorer"
-      >
-        <QuickExplorerIcon />
-      </button>
       <div style={{ flex: 1 }} />
       <div className="taskbar-sep-v" />
       <div className="taskbar-tray">
@@ -1195,11 +962,13 @@ export default function Index() {
             </div>
 
             <div className="main-pane">
-              {activePane === "This User" && <AboutPane />}
-              {activePane === "Drivers" && <SkillsPane />}
-              {activePane === "Program Files" && <ProjectsPane />}
-              {activePane === "Event Logs" && <ExperiencePane />}
-              {activePane === "Network" && <ContactPane />}
+              <div key={activePane} className="pane-shell">
+                {activePane === "This User" && <AboutPane />}
+                {activePane === "Drivers" && <SkillsPane />}
+                {activePane === "Program Files" && <ProjectsPane />}
+                {activePane === "Event Logs" && <ExperiencePane />}
+                {activePane === "Network" && <ContactPane />}
+              </div>
             </div>
           </div>
 
@@ -1211,6 +980,14 @@ export default function Index() {
             </span>
           </div>
         </div>
+        <a
+          className="icons8-credit"
+          href="https://icons8.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Windows icons by icons8
+        </a>
       </div>
       <Taskbar clockTime={clock.time} clockDate={clock.date} />
     </>
