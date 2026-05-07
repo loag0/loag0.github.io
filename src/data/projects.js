@@ -6,7 +6,7 @@ export const projects = [
       "An AI-powered mobile app that generates personalized study plans from uploaded syllabi, assignments and deadlines. Leverages Google Gemini to parse files and extract scheduling context, producing structured weekly timetables. Offline support via SQLite, FastAPI backend hosted on Railway and React Native/Expo frontend.",
     tech: ["React Native", "Firebase", "Expo", "Python", "FastAPI", "SQLite", "Supabase"],
     link: "https://github.com/loag0/brAInwave",
-    label: "Coming soon",
+    label: "Mobile App",
   },
   {
     id: 2,
