@@ -771,6 +771,7 @@ export default function Index() {
     setExpandedFolders((prev) => ({ ...prev, [pane]: !prev[pane] }));
   };
   const sidebarRef = useRef(null);
+  const mobileMenuButtonRef = useRef(null);
   const clickSoundRef = useRef(null);
 
   const paneCount = {
@@ -801,7 +802,6 @@ export default function Index() {
     setHistory(newHistory);
     setHistoryIndex(newHistory.length - 1);
     setActivePane(pane);
-    setSidebarOpen(false);
   };
 
   const goBack = () => {
@@ -825,7 +825,10 @@ export default function Index() {
 
   useEffect(() => {
     const handler = (e) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(e.target)) {
+      const clickedSidebar = sidebarRef.current?.contains(e.target);
+      const clickedMenuButton = mobileMenuButtonRef.current?.contains(e.target);
+
+      if (!clickedSidebar && !clickedMenuButton) {
         setSidebarOpen(false);
       }
     };
@@ -844,6 +847,7 @@ export default function Index() {
               {activePane} · Loago Moremi
             </div>
             <button
+              ref={mobileMenuButtonRef}
               className={`mobile-menu-btn ${sidebarOpen ? "mobile-menu-btn--open" : ""}`}
               onClick={() => setSidebarOpen((v) => !v)}
               aria-label="Toggle sidebar"
@@ -960,6 +964,12 @@ export default function Index() {
                 </div>
               ))}
             </div>
+
+            <div
+              className={`mobile-sidebar-overlay ${sidebarOpen ? "open" : ""}`}
+              onClick={() => setSidebarOpen(false)}
+              aria-hidden="true"
+            />
 
             <div className="main-pane">
               <div key={activePane} className="pane-shell">
