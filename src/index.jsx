@@ -433,10 +433,6 @@ function AboutPane() {
               <h2 className="about-name" style={{ marginBottom: 0 }}>
                 Loago Moremi
               </h2>
-              <span className="meta-chip meta-chip--green">
-                <span className="status-dot" style={{ marginRight: 6 }} />
-                Open to opportunities
-              </span>
             </div>
             <p className="about-role">
               Computer Science Student · Front-end Developer
@@ -470,9 +466,9 @@ function AboutPane() {
                   icon={faLocationPin}
                   style={{ marginRight: 5, fontSize: 10 }}
                 />
-                Francistown, BW
+                Tati Siding, BW
               </span>
-              <span className="meta-chip">BIUST · Final Year</span>
+              <span className="meta-chip">BIUST Alumnus</span>
               <a
                 href="/assets/Loago_Moremi - CV.pdf"
                 download
@@ -672,7 +668,7 @@ function ContactPane() {
               </div>
               <div>
                 <p className="contact-label">Location</p>
-                <p className="contact-plain">Francistown, BW</p>
+                <p className="contact-plain">Tati Siding, BW</p>
               </div>
             </div>
           </div>
@@ -775,11 +771,11 @@ export default function Index() {
   const clickSoundRef = useRef(null);
 
   const paneCount = {
-    "This User": "4 items",
-    Drivers: `${Object.values(skills).flat().length} items`,
-    "Program Files": `${projects.length} items`,
-    "Event Logs": `${experience.length} items`,
-    Network: "4 items",
+    "This User": "4 items |",
+    Drivers: `${Object.values(skills).flat().length} items |`,
+    "Program Files": `${projects.length} items |`,
+    "Event Logs": `${experience.length} items |`,
+    Network: "4 items |",
   };
 
   useEffect(() => {
@@ -984,10 +980,6 @@ export default function Index() {
 
           <div className="statusbar">
             <span>{paneCount[activePane]}</span>
-            <span>
-              <span className="status-dot" />
-              Open to opportunities · Francistown, BW
-            </span>
           </div>
         </div>
         <a
