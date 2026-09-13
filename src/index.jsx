@@ -435,29 +435,34 @@ function AboutPane() {
               </h2>
             </div>
             <p className="about-role">
-              Computer Science Student · Front-end Developer
+              Computer Science Graduate · Software Developer & UI Enthusiast
             </p>
             <div className="about-body">
               <p>
-                I'm a computer science student who learns the hard way on
+                I'm a computer science graduate who learns the hard way on
                 purpose. One of my favorite pastimes (maybe not so favorite) is
                 building something, breaking it, staring at the error for 20
-                minutes, then fixing it. Most of what I know came from debugging
-                stuff that had no business working in the first place (including
-                my hackintosh era). I like front-end because I'm obsessed with
-                the way software looks and feels. It's something that I care
-                deeply about in any product I use so that made me want to
-                prioritize front-end development so I can actually make things
-                that I would want to use.
+                minutes, then figuring out why it broke. Most of what I know
+                came from debugging stuff that had no business working in the
+                first place - including my hackintosh era.
               </p>
               <p>
-                Lately I've been trying to extend my knowledge of development by
-                learning Python and utilizing it for backend capability. I've
-                also been exploring the intersection of AI and everyday
-                productivity. My current project is an AI-powered study planner
-                that actually understands how students procrastinate. I also
-                made an audio converter because I like customizing the
-                notification sounds on my phone.
+                I gravitated toward frontend development because I'm obsessed
+                with the way software looks, feels, and behaves. I care a lot
+                about the details that make a product enjoyable to use, and I
+                want to build software that I'd actually want to use myself. At
+                the same time, I've been expanding beyond the frontend into
+                backend development, working with Python, APIs, databases, and
+                the systems that make applications actually work.
+              </p>
+              <p>
+                I also like building things around problems I encounter in
+                everyday life, which has led me to explore everything from
+                AI-powered productivity tools to an audio converter for
+                customizing the notification sounds on my phone. I’m less
+                interested in sticking to one particular stack and more
+                interested in learning whatever I need to turn an idea into
+                something that works.
               </p>
             </div>
             <div className="about-meta">
@@ -516,56 +521,77 @@ function SkillsPane() {
 }
 
 function ProjectsPane() {
+  const completedProjects = projects.filter(
+    (project) => project.status === "completed",
+  );
+
+  const exploringProjects = projects.filter(
+    (project) => project.status === "exploring",
+  );
+
+  const renderProject = (project) => (
+    <div key={project.id} className="project-row">
+      <div>
+        <div className="project-label-row">
+          <span
+            className={`project-badge ${
+              project.label === "In Progress" ? "coming" : ""
+            }`}
+          >
+            {project.label}
+          </span>
+        </div>
+
+        <h3 className="project-name">{project.title}</h3>
+
+        <p className="project-desc">{project.description}</p>
+
+        <div className="project-tech-row">
+          {project.tech.map((t) => (
+            <span key={t} className="tech-chip">
+              {t}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {project.link && project.visibility !== "private" && (
+        <a
+          href={project.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="project-link-btn"
+        >
+          <FontAwesomeIcon icon={faGithub} style={{ width: 12, height: 12 }} />
+          View on GitHub
+        </a>
+      )}
+    </div>
+  );
+
   return (
     <>
       <div className="pane-header">
         <span className="pane-title">Program Files</span>
-        <span className="pane-count">{projects.length} items</span>
+        <span className="pane-count">{completedProjects.length} items</span>
       </div>
+
       <div className="pane-content">
         <div className="projects-list">
-          {projects.map((project) => (
-            <div key={project.id} className="project-row">
-              <div>
-                <div className="project-label-row">
-                  <span
-                    className={`project-badge ${project.label === "Coming soon" ? "coming" : ""}`}
-                  >
-                    {project.label}
-                  </span>
-                </div>
-                <h3 className="project-name">{project.title}</h3>
-                <p className="project-desc">{project.description}</p>
-                <div className="project-tech-row">
-                  {project.tech.map((t) => (
-                    <span key={t} className="tech-chip">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              {project.link && (
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="project-link-btn"
-                >
-                  <FontAwesomeIcon
-                    icon={faGithub}
-                    style={{ width: 12, height: 12 }}
-                  />
-                  View on GitHub
-                </a>
-              )}
+          {completedProjects.map(renderProject)}
+
+          {exploringProjects.length > 0 && (
+            <div className="projects-section-divider">
+              <span>Currently Exploring</span>
             </div>
-          ))}
+          )}
+
+          {exploringProjects.map(renderProject)}
         </div>
       </div>
     </>
   );
 }
-
 function ExperiencePane() {
   return (
     <>
