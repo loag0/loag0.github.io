@@ -1423,3 +1423,116 @@ ul { list-style: none; }
     transition-duration: 0.001ms !important;
   }
 }
+
+
+/* ════════════════════
+   WINDOWS 7 CURSORS
+════════════════════ */
+:root {
+  --cursor-default: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M5 3l1 21 6-6 5 10 4-2-5-10h9L5 3z' fill='white' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 5 3, default;
+  --cursor-pointer: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M11 5v11l-3-3-3 3 7 8 4-4 4 4 3-3-5-5V5c0-1-1-2-2-2s-2 1-2 2v8V5c0-1-1-2-2-2s-2 1-2 2z' fill='white' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 12 3, pointer;
+  --cursor-text: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M9 5h14M16 5v22M9 27h14' fill='none' stroke='white' stroke-width='5'/%3E%3Cpath d='M9 5h14M16 5v22M9 27h14' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E") 16 16, text;
+}
+
+body {
+  cursor: var(--cursor-default);
+}
+
+a,
+button,
+[role="button"],
+input[type="button"],
+input[type="submit"] {
+  cursor: var(--cursor-pointer);
+}
+
+p,
+h1, h2, h3, h4, h5, h6,
+span,
+li {
+  cursor: var(--cursor-text);
+}
+
+input,
+textarea,
+[contenteditable="true"] {
+  cursor: var(--cursor-text);
+}
+
+button:disabled,
+a[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+/* ════════════════════
+   WINDOWS 7 TOOLTIPS
+════════════════════ */
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 7px);
+  transform: translateX(-50%);
+  padding: 3px 7px;
+  border: 1px solid #7f7f7f;
+  border-radius: 2px;
+  background: #fffbd6;
+  color: #222;
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.2;
+  white-space: nowrap;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.25);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 80ms ease;
+  z-index: 1000;
+}
+
+[data-tooltip]:hover::after,
+[data-tooltip]:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.taskbar [data-tooltip]::after {
+  bottom: calc(100% + 9px);
+}
+
+/* ════════════════════
+   WINDOWS 7 LOADING STRIP
+════════════════════ */
+.loading-bar {
+  height: 3px;
+  overflow: hidden;
+  background: #e6edf4;
+  opacity: 0;
+  transition: opacity 80ms ease;
+  flex-shrink: 0;
+}
+
+.loading-bar--active {
+  opacity: 1;
+}
+
+.loading-bar-fill {
+  height: 100%;
+  width: 34%;
+  background: linear-gradient(to right, #4b91d1, #8cc5f2, #4b91d1);
+  transform: translateX(-120%);
+}
+
+.loading-bar--active .loading-bar-fill {
+  animation: explorer-loading 280ms ease-out forwards;
+}
+
+@keyframes explorer-loading {
+  from { transform: translateX(-120%); }
+  to { transform: translateX(310%); }
+}
