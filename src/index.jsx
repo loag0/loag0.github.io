@@ -477,6 +477,7 @@ function AboutPane() {
               <a
                 href="/assets/Loago_Moremi - CV.pdf"
                 download
+                onClick={playNotification}
                 className="toolbar-btn toolbar-btn--primary"
                 style={{ display: "inline-flex", alignItems: "center", gap: 5 }}
               >
@@ -715,28 +716,28 @@ function Taskbar({ clockTime, clockDate }) {
         <button
           className="taskbar-ql-btn"
           tabIndex={-1}
-          title="Internet Explorer"
+          title="Internet Explorer" data-tooltip="Internet Explorer"
         >
           <QuickIEIcon />
         </button>
         <button
           className="taskbar-ql-btn"
           tabIndex={-1}
-          title="Windows Media Player"
+          title="Windows Media Player" data-tooltip="Windows Media Player"
         >
           <QuickWMPIcon />
         </button>
         <button
           className="taskbar-window-chip taskbar-window-chip--active"
           tabIndex={-1}
-          title="Loago Moremi - File Explorer"
+          title="Loago Moremi - File Explorer" data-tooltip="Loago Moremi - File Explorer"
         >
           <QuickExplorerIcon />
         </button>
         <button
           className="taskbar-ql-btn taskbar-ql-btn--show-desktop"
           tabIndex={-1}
-          title="Microsoft Paint"
+          title="Microsoft Paint" data-tooltip="Microsoft Paint"
         >
           <PaintIcon />
         </button>
@@ -763,6 +764,7 @@ export default function Index() {
   const [history, setHistory] = useState(["This User"]);
   const [historyIndex, setHistoryIndex] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
   const [expandedFolders, setExpandedFolders] = useState({ "This User": true });
   const [clock, setClock] = useState(() => {
     const now = new Date();
@@ -795,6 +797,7 @@ export default function Index() {
   const sidebarRef = useRef(null);
   const mobileMenuButtonRef = useRef(null);
   const clickSoundRef = useRef(null);
+  const notificationAudioContextRef = useRef(null);
 
   const paneCount = {
     "This User": "4 items |",
@@ -811,35 +814,76 @@ export default function Index() {
 
   const playClick = () => {
     try {
+      if (!clickSoundRef.current) return;
       clickSoundRef.current.currentTime = 0;
-      clickSoundRef.current.play();
+      clickSoundRef.current.play().catch(() => {});
       //eslint-disable-next-line no-empty , no-unused-vars
+    } catch (_) {}
+  };
+
+  const playNotification = () => {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+
+      const ctx =
+        notificationAudioContextRef.current ||
+        new AudioContext();
+      notificationAudioContextRef.current = ctx;
+
+      const now = ctx.currentTime;
+      const master = ctx.createGain();
+      master.gain.setValueAtTime(0.0001, now);
+      master.gain.exponentialRampToValueAtTime(0.12, now + 0.015);
+      master.gain.exponentialRampToValueAtTime(0.0001, now + 0.42);
+      master.connect(ctx.destination);
+
+      const first = ctx.createOscillator();
+      const second = ctx.createOscillator();
+      first.type = "sine";
+      second.type = "sine";
+      first.frequency.setValueAtTime(784, now);
+      second.frequency.setValueAtTime(1047, now + 0.07);
+      first.connect(master);
+      second.connect(master);
+      first.start(now);
+      first.stop(now + 0.2);
+      second.start(now + 0.07);
+      second.stop(now + 0.42);
+
+      if (ctx.state === "suspended") ctx.resume().catch(() => {});
     } catch (_) {}
   };
 
   const navigateTo = (pane) => {
     if (pane === activePane) return;
     playClick();
+    setIsNavigating(true);
     const newHistory = [...history.slice(0, historyIndex + 1), pane];
     setHistory(newHistory);
     setHistoryIndex(newHistory.length - 1);
     setActivePane(pane);
+    window.setTimeout(() => setIsNavigating(false), 280);
   };
 
   const goBack = () => {
     if (historyIndex <= 0) return;
     playClick();
     const newIndex = historyIndex - 1;
+    setIsNavigating(true);
     setHistoryIndex(newIndex);
     setActivePane(history[newIndex]);
+    window.setTimeout(() => setIsNavigating(false), 280);
   };
 
   const goForward = () => {
     if (historyIndex >= history.length - 1) return;
     playClick();
     const newIndex = historyIndex + 1;
+    setIsNavigating(true);
     setHistoryIndex(newIndex);
     setActivePane(history[newIndex]);
+    window.setTimeout(() => setIsNavigating(false), 280);
   };
 
   const canBack = historyIndex > 0;
@@ -917,6 +961,10 @@ export default function Index() {
             <span className="addrbar-label">Address</span>
             <div className="addrbar-path">{breadcrumb(activePane)}</div>
             <div className="addrbar-search">Search Loago Moremi...</div>
+          </div>
+
+          <div className={`loading-bar ${isNavigating ? "loading-bar--active" : ""}`}>
+            <div className="loading-bar-fill" />
           </div>
 
           <div className="explorer-body">
