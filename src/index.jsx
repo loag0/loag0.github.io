@@ -718,7 +718,6 @@ function Taskbar({ clockTime, clockDate }) {
         <button
           className="taskbar-ql-btn"
           tabIndex={-1}
-          title="Internet Explorer"
           data-tooltip="Internet Explorer"
         >
           <QuickIEIcon />
@@ -726,7 +725,6 @@ function Taskbar({ clockTime, clockDate }) {
         <button
           className="taskbar-ql-btn"
           tabIndex={-1}
-          title="Windows Media Player"
           data-tooltip="Windows Media Player"
         >
           <QuickWMPIcon />
@@ -734,7 +732,6 @@ function Taskbar({ clockTime, clockDate }) {
         <button
           className="taskbar-window-chip taskbar-window-chip--active"
           tabIndex={-1}
-          title="Loago Moremi - File Explorer"
           data-tooltip="Loago Moremi - File Explorer"
         >
           <QuickExplorerIcon />
@@ -742,7 +739,6 @@ function Taskbar({ clockTime, clockDate }) {
         <button
           className="taskbar-ql-btn taskbar-ql-btn--show-desktop"
           tabIndex={-1}
-          title="Microsoft Paint"
           data-tooltip="Microsoft Paint"
         >
           <PaintIcon />
