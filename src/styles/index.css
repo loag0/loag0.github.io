@@ -39,8 +39,7 @@ html { -webkit-font-smoothing: antialiased; }
 
 body {
   font-family: var(--font);
-  background-image: url('/assets/bliss-1280.webp');
-  background-image: url('/assets/bliss-1280.avif');
+  background-image: url('/assets/images/bliss-1280.avif');
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -113,8 +112,7 @@ ul { list-style: none; }
 
 @media (min-width: 1281px), (min-resolution: 1.5dppx) {
   body {
-    background-image: url('/assets/bliss-1920.webp');
-    background-image: url('/assets/bliss-1920.avif');
+    background-image: url('/assets/images/bliss-1920.avif');
   }
 }
 
@@ -198,7 +196,7 @@ ul { list-style: none; }
   color: #1a3656;
   font-size: 9px;
   font-family: "Marlett", "Segoe UI", Arial, sans-serif;
-  cursor: pointer;
+  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -281,7 +279,7 @@ ul { list-style: none; }
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  
   transition: background 120ms, box-shadow 120ms;
   flex-shrink: 0;
 }
@@ -317,7 +315,7 @@ ul { list-style: none; }
   border-radius: 3px;
   border: 1px solid transparent;
   background: transparent;
-  cursor: pointer;
+  
   transition: background 120ms, border-color 120ms, color 120ms, box-shadow 120ms, transform 80ms;
   white-space: nowrap;
 }
@@ -434,7 +432,7 @@ ul { list-style: none; }
   padding: 5px 8px 5px 4px;
   font-size: 12px;
   color: var(--sidebar-text);
-  cursor: pointer;
+  
   border-left: 2px solid transparent;
   transition: background 100ms, transform 80ms;
   user-select: none;
@@ -489,7 +487,7 @@ ul { list-style: none; }
   align-items: center;
   gap: 6px;
   padding: 3px 12px 3px 30px;
-  cursor: pointer;
+  
   transition: background 100ms, transform 80ms;
   user-select: none;
 }
@@ -543,7 +541,7 @@ ul { list-style: none; }
   padding: 4px 12px;
   font-size: 11px;
   color: var(--accent);
-  cursor: pointer;
+  
   transition: color 100ms;
 }
 
@@ -718,7 +716,6 @@ ul { list-style: none; }
   border: 1px solid #c4d8f0;
   padding: 5px 12px;
   border-radius: 2px;
-  cursor: default;
   transition: background 120ms, border-color 120ms, color 120ms, transform 80ms;
 }
 
@@ -820,7 +817,6 @@ ul { list-style: none; }
   padding: 5px 12px;
   border-radius: 3px;
   background: transparent;
-  cursor: pointer;
   font-family: var(--font);
   transition: background 120ms, color 120ms, box-shadow 120ms, transform 80ms;
   white-space: nowrap;
@@ -1043,7 +1039,6 @@ ul { list-style: none; }
   gap: 4px;
   width: 26px; height: 26px;
   background: none; border: none;
-  cursor: pointer; padding: 0;
 }
 
 .mobile-menu-bar {
@@ -1190,7 +1185,7 @@ ul { list-style: none; }
       rgba(25,102,184,0.94) 58%,
       rgba(8,56,130,1) 100%);
   flex-shrink: 0;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   overflow: hidden;
   position: relative;
   box-shadow:
@@ -1261,6 +1256,11 @@ ul { list-style: none; }
   transform: translateY(1px) scale(0.98);
 }
 
+.taskbar-start-orb[data-tooltip]::after {
+  left: 50%;
+  transform: translateX(-35%);
+}
+
 .taskbar-quicklaunch {
   display: flex; align-items: center; gap: 2px;
   flex-shrink: 0;
@@ -1272,7 +1272,6 @@ ul { list-style: none; }
   background: transparent;
   border: 1px solid transparent;
   border-radius: 3px;
-  cursor: pointer;
   transition: background 100ms, border-color 100ms, box-shadow 100ms, transform 80ms;
   flex-shrink: 0;
 }
@@ -1304,7 +1303,6 @@ ul { list-style: none; }
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   margin-left: 10px;
   transition: background 120ms;
 }
@@ -1326,7 +1324,6 @@ ul { list-style: none; }
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 3px;
-  cursor: default; flex-shrink: 0;
   transition: background 100ms, box-shadow 160ms;
 }
 
@@ -1407,7 +1404,7 @@ ul { list-style: none; }
   display: flex; align-items: center; gap: 7px;
   padding: 4px 12px 4px 10px;
   font-size: 11px; color: var(--sidebar-text);
-  cursor: pointer; transition: background 100ms; user-select: none;
+   transition: background 100ms; user-select: none;
 }
 
 .sidebar-link-item:hover { background: var(--sidebar-hover); }
@@ -1428,45 +1425,54 @@ ul { list-style: none; }
 /* ════════════════════
    WINDOWS 7 CURSORS
 ════════════════════ */
+
 :root {
-  --cursor-default: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M5 3l1 21 6-6 5 10 4-2-5-10h9L5 3z' fill='white' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 5 3, default;
-  --cursor-pointer: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M11 5v11l-3-3-3 3 7 8 4-4 4 4 3-3-5-5V5c0-1-1-2-2-2s-2 1-2 2v8V5c0-1-1-2-2-2s-2 1-2 2z' fill='white' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 12 3, pointer;
-  --cursor-text: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M9 5h14M16 5v22M9 27h14' fill='none' stroke='white' stroke-width='5'/%3E%3Cpath d='M9 5h14M16 5v22M9 27h14' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E") 16 16, text;
+  --cursor-default: url("/assets/cursors/aero_arrow.cur"), default;
+  --cursor-text: url("/assets/cursors/ibeam.cur"), text;
+  --cursor-pointer: url("/assets/cursors/aero_link.cur"), pointer;
+  --cursor-unavailable: url("/assets/cursors/aero_unavail.cur"), not-allowed;
 }
 
-body {
+html,
+body,
+#root {
   cursor: var(--cursor-default);
+}
+
+#root h1,
+#root h2,
+#root h3,
+#root h4,
+#root h5,
+#root h6,
+#root p,
+#root span,
+#root li {
+  cursor: var(--cursor-text);
 }
 
 a,
 button,
 [role="button"],
-input[type="button"],
-input[type="submit"] {
+.sidebar-link-item,
+.sidebar-item,
+.sidebar-file-item,
+.sidebar-chevron {
   cursor: var(--cursor-pointer);
 }
 
-p,
-h1, h2, h3, h4, h5, h6,
-span,
-li {
-  cursor: var(--cursor-text);
-}
-
-input,
-textarea,
-[contenteditable="true"] {
-  cursor: var(--cursor-text);
+/* Clickable mobile menu */
+#root button.mobile-menu-btn,
+#root button.mobile-menu-btn * {
+  cursor: var(--cursor-pointer);
 }
 
 button:disabled,
 a[aria-disabled="true"] {
-  cursor: not-allowed;
+  cursor: var(--cursor-unavailable);
 }
 
-/* ════════════════════
-   WINDOWS 7 TOOLTIPS
-════════════════════ */
+/* Windows 7-style tooltips */
 [data-tooltip] {
   position: relative;
 }
@@ -1477,22 +1483,30 @@ a[aria-disabled="true"] {
   left: 50%;
   bottom: calc(100% + 7px);
   transform: translateX(-50%);
+
   padding: 3px 7px;
   border: 1px solid #7f7f7f;
   border-radius: 2px;
+
   background: #fffbd6;
   color: #222;
+
   font-family: "Segoe UI", Arial, sans-serif;
   font-size: 11px;
   font-weight: 400;
   line-height: 1.2;
   white-space: nowrap;
-  box-shadow: 1px 1px 2px rgba(0,0,0,0.25);
+
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+
   transition: opacity 80ms ease;
   z-index: 1000;
+
+  cursor: var(--cursor-default);
 }
 
 [data-tooltip]:hover::after,
@@ -1509,16 +1523,15 @@ a[aria-disabled="true"] {
    WINDOWS 7 LOADING STRIP
 ════════════════════ */
 .loading-bar {
+  display: none;
   height: 3px;
   overflow: hidden;
   background: #e6edf4;
-  opacity: 0;
-  transition: opacity 80ms ease;
   flex-shrink: 0;
 }
 
 .loading-bar--active {
-  opacity: 1;
+  display: block;
 }
 
 .loading-bar-fill {

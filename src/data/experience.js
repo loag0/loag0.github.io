@@ -3,7 +3,7 @@ export const experience = [
     id: 1,
     title: "IT Attaché – Debswana Mining Company",
     date: "June 2025 – July 2025",
-    logo: "/assets/debswana.jpg",
+    logo: "/assets/images/debswana.jpg",
     bullets: [
       "Rotated across four IT sub-departments (Back-Office, Networks, Applications, Desktops) supporting enterprise IT operations across corporate offices, schools, and mine sites",
       "Contributed to a company-wide Windows 10 to 11 upgrade rollout, personally handling ~50 of ~250 laptops including scheduling, verifying cloud backups, clean OS installs, and software reinstallation",
