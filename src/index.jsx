@@ -394,7 +394,7 @@ function Win7Btns() {
   );
 }
 
-function AboutPane() {
+function AboutPane({ onDownloadCV }) {
   return (
     <>
       <div className="pane-header">
@@ -407,11 +407,11 @@ function AboutPane() {
             <picture>
               <source
                 type="image/webp"
-                srcSet="/assets/profile-360.webp 360w, /assets/profile-720.webp 720w"
+                srcSet="/assets/images/profile-360.webp 360w, /assets/images/profile-720.webp 720w"
                 sizes="(max-width: 768px) 140px, 180px"
               />
               <img
-                src="/assets/profile-360.webp"
+                src="/assets/images/profile-360.webp"
                 alt="Loago Moremi"
                 width="180"
                 height="240"
@@ -430,9 +430,9 @@ function AboutPane() {
                 marginBottom: 4,
               }}
             >
-              <h2 className="about-name" style={{ marginBottom: 0 }}>
+              <h1 className="about-name" style={{ marginBottom: 0 }}>
                 Loago Moremi
-              </h2>
+              </h1>
             </div>
             <p className="about-role">
               Computer Science Graduate · Software Developer & UI Enthusiast
@@ -475,9 +475,9 @@ function AboutPane() {
               </span>
               <span className="meta-chip">BIUST Alumnus</span>
               <a
-                href="/assets/Loago_Moremi - CV.pdf"
+                href="/assets/documents/Loago_Moremi - CV.pdf"
                 download
-                onClick={playNotification}
+                onClick={onDownloadCV}
                 className="toolbar-btn toolbar-btn--primary"
                 style={{ display: "inline-flex", alignItems: "center", gap: 5 }}
               >
@@ -708,36 +708,42 @@ function ContactPane() {
 function Taskbar({ clockTime, clockDate }) {
   return (
     <div className="taskbar">
-      <div className="taskbar-start-orb">
-        <StartLogo />
+      <div className="taskbar-start-tooltip" data-tooltip="Start">
+        <div className="taskbar-start-orb">
+          <StartLogo />
+        </div>
       </div>
       <div className="taskbar-sep-v" />
       <div className="taskbar-quicklaunch">
         <button
           className="taskbar-ql-btn"
           tabIndex={-1}
-          title="Internet Explorer" data-tooltip="Internet Explorer"
+          title="Internet Explorer"
+          data-tooltip="Internet Explorer"
         >
           <QuickIEIcon />
         </button>
         <button
           className="taskbar-ql-btn"
           tabIndex={-1}
-          title="Windows Media Player" data-tooltip="Windows Media Player"
+          title="Windows Media Player"
+          data-tooltip="Windows Media Player"
         >
           <QuickWMPIcon />
         </button>
         <button
           className="taskbar-window-chip taskbar-window-chip--active"
           tabIndex={-1}
-          title="Loago Moremi - File Explorer" data-tooltip="Loago Moremi - File Explorer"
+          title="Loago Moremi - File Explorer"
+          data-tooltip="Loago Moremi - File Explorer"
         >
           <QuickExplorerIcon />
         </button>
         <button
           className="taskbar-ql-btn taskbar-ql-btn--show-desktop"
           tabIndex={-1}
-          title="Microsoft Paint" data-tooltip="Microsoft Paint"
+          title="Microsoft Paint"
+          data-tooltip="Microsoft Paint"
         >
           <PaintIcon />
         </button>
@@ -747,7 +753,9 @@ function Taskbar({ clockTime, clockDate }) {
       <div className="taskbar-sep-v" />
       <div className="taskbar-tray">
         <span className="taskbar-tray-text">ENG</span>
-        <TrayVolumeIcon />
+        <span data-tooltip="Volume">
+          <TrayVolumeIcon />
+        </span>
         <TrayNetworkIcon />
         <div className="taskbar-sep-v" />
         <div className="taskbar-clock">
@@ -797,7 +805,6 @@ export default function Index() {
   const sidebarRef = useRef(null);
   const mobileMenuButtonRef = useRef(null);
   const clickSoundRef = useRef(null);
-  const notificationAudioContextRef = useRef(null);
 
   const paneCount = {
     "This User": "4 items |",
@@ -808,7 +815,7 @@ export default function Index() {
   };
 
   useEffect(() => {
-    clickSoundRef.current = new Audio("/assets/mouse-click.mp3");
+    clickSoundRef.current = new Audio("/assets/audio/mouse-click.mp3");
     clickSoundRef.current.volume = 0.6;
   }, []);
 
@@ -821,38 +828,18 @@ export default function Index() {
     } catch (_) {}
   };
 
-  const playNotification = () => {
-    try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (!AudioContext) return;
+  const dingSoundRef = useRef(null);
 
-      const ctx =
-        notificationAudioContextRef.current ||
-        new AudioContext();
-      notificationAudioContextRef.current = ctx;
+  useEffect(() => {
+    dingSoundRef.current = new Audio("/assets/audio/ding.wav");
+    dingSoundRef.current.volume = 0.6;
+  }, []);
 
-      const now = ctx.currentTime;
-      const master = ctx.createGain();
-      master.gain.setValueAtTime(0.0001, now);
-      master.gain.exponentialRampToValueAtTime(0.12, now + 0.015);
-      master.gain.exponentialRampToValueAtTime(0.0001, now + 0.42);
-      master.connect(ctx.destination);
+  const playDing = () => {
+    if (!dingSoundRef.current) return;
 
-      const first = ctx.createOscillator();
-      const second = ctx.createOscillator();
-      first.type = "sine";
-      second.type = "sine";
-      first.frequency.setValueAtTime(784, now);
-      second.frequency.setValueAtTime(1047, now + 0.07);
-      first.connect(master);
-      second.connect(master);
-      first.start(now);
-      first.stop(now + 0.2);
-      second.start(now + 0.07);
-      second.stop(now + 0.42);
-
-      if (ctx.state === "suspended") ctx.resume().catch(() => {});
-    } catch (_) {}
+    dingSoundRef.current.currentTime = 0;
+    dingSoundRef.current.play().catch(() => {});
   };
 
   const navigateTo = (pane) => {
@@ -917,6 +904,7 @@ export default function Index() {
               className={`mobile-menu-btn ${sidebarOpen ? "mobile-menu-btn--open" : ""}`}
               onClick={() => setSidebarOpen((v) => !v)}
               aria-label="Toggle sidebar"
+              data-tooltip="Toggle sidebar"
             >
               <span className="mobile-menu-bar" />
               <span className="mobile-menu-bar" />
@@ -931,7 +919,6 @@ export default function Index() {
               disabled={!canBack}
               style={{
                 opacity: canBack ? 1 : 0.4,
-                cursor: canBack ? "pointer" : "default",
               }}
             >
               &#9664; Back
@@ -942,7 +929,6 @@ export default function Index() {
               disabled={!canForward}
               style={{
                 opacity: canForward ? 1 : 0.4,
-                cursor: canForward ? "pointer" : "default",
               }}
             >
               Forward &#9654;
@@ -963,7 +949,9 @@ export default function Index() {
             <div className="addrbar-search">Search Loago Moremi...</div>
           </div>
 
-          <div className={`loading-bar ${isNavigating ? "loading-bar--active" : ""}`}>
+          <div
+            className={`loading-bar ${isNavigating ? "loading-bar--active" : ""}`}
+          >
             <div className="loading-bar-fill" />
           </div>
 
@@ -1043,7 +1031,9 @@ export default function Index() {
 
             <div className="main-pane">
               <div key={activePane} className="pane-shell">
-                {activePane === "This User" && <AboutPane />}
+                {activePane === "This User" && (
+                  <AboutPane onDownloadCV={playDing} />
+                )}
                 {activePane === "Drivers" && <SkillsPane />}
                 {activePane === "Program Files" && <ProjectsPane />}
                 {activePane === "Event Logs" && <ExperiencePane />}

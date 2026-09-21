@@ -46,7 +46,7 @@ export const QuickWMPIcon = () => (
   <img
     width="24"
     height="24"
-    src="/assets/icons8-windows-media-player-48.png"
+    src="/assets/icons/icons8-windows-media-player-48.png"
     alt="windows-media-player"
   />
 );
@@ -55,7 +55,7 @@ export const QuickExplorerIcon = () => (
   <img
     width="24"
     height="24"
-    src="/assets/icons8-file-explorer-new-48.png"
+    src="/assets/icons/icons8-file-explorer-new-48.png"
     alt="file-explorer-new"
   />
 );
@@ -64,7 +64,7 @@ export const PaintIcon = () => (
   <img
     width="24"
     height="24"
-    src="/assets/icons8-microsoft-paint-48.png"
+    src="/assets/icons/icons8-microsoft-paint-48.png"
     alt="microsoft-paint"
   />
 );

@@ -63,7 +63,7 @@ export default function MobileMenu() {
               Contact
             </a>
             <a
-              href="/assets/Loago_Moremi - CV.pdf"
+              href="/assets/documents/Loago_Moremi - CV.pdf"
               download
               className="mobile-menu-link mobile-menu-link--accent"
               onClick={close}
