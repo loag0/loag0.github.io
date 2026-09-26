@@ -39,5 +39,5 @@ I chose Windows 7 as the design inspiration because I like its visual style and 
 ## Acknowledgements
 
 - FontAwesome - For the icon set
-- [Icons8](icons8.com) - For the interface assets
+- [Icons8](https://www.icons8.com) - For the interface assets
 - Microsoft - For the sweet design of Windows 7
