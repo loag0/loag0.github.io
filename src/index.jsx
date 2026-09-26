@@ -900,6 +900,7 @@ export default function Index() {
               className={`mobile-menu-btn ${sidebarOpen ? "mobile-menu-btn--open" : ""}`}
               onClick={() => setSidebarOpen((v) => !v)}
               aria-label="Toggle sidebar"
+              aria-expanded={sidebarOpen}
               data-tooltip="Toggle sidebar"
             >
               <span className="mobile-menu-bar" />
