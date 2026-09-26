@@ -168,12 +168,6 @@ ul { list-style: none; }
   text-shadow: 0 1px 0 rgba(255,255,255,0.5);
 }
 
-.titlebar-icon {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-}
-
 .win7-btns {
   position: absolute;
   top: 0;
@@ -507,15 +501,6 @@ ul { list-style: none; }
 
 .sidebar-file-ext { color: var(--text-muted); }
 
-.folder-ico {
-  width: 16px;
-  height: 13px;
-  background: var(--folder-yellow);
-  border-radius: 1px 4px 2px 2px;
-  position: relative;
-  flex-shrink: 0;
-}
-
 .folder-ico::before {
   content: '';
   position: absolute;
@@ -674,13 +659,6 @@ ul { list-style: none; }
   padding: 4px 10px;
   border-radius: 2px;
   border: 1px solid #c4d8f0;
-}
-
-.meta-chip--green {
-  background: #e6f7ee;
-  color: #1a6b3a;
-  border-color: #a3d9b8;
-  font-weight: 600;
 }
 
 /* ════════════════════
@@ -1287,13 +1265,6 @@ ul { list-style: none; }
   transform: translateY(1px);
   box-shadow: inset 0 1px 5px rgba(0,0,0,0.34);
 }
-
-/* Quick-launch icon colors */
-.ql-icon { font-size: 16px; }
-.ql-icon--ie       { color: #4aa8e8; }
-.ql-icon--wmp      { color: #e89030; }
-.ql-icon--explorer { color: #f0c040; }
-.ql-icon--desktop  { color: rgba(200,220,255,0.85); }
 
 .taskbar-show-desktop {
   width: 14px;
