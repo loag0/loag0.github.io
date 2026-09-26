@@ -1043,14 +1043,21 @@ export default function Index() {
             <span>{paneCount[activePane]}</span>
           </div>
         </div>
+
+        <div className="icons8-credit">
         <a
-          className="icons8-credit"
-          href="https://icons8.com"
+          href="https://icons8.com/icon/17854/windows-xp"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Windows icons by icons8
+          Windows XP
+        </a>{" "}
+        icon by{" "}
+        <a
+          target="_blank" href="https://icons8.com">
+          Icons8
         </a>
+      </div>
       </div>
       <Taskbar clockTime={clock.time} clockDate={clock.date} />
     </>
