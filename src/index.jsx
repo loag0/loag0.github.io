@@ -379,17 +379,23 @@ function FolderIcon({ size = 16 }) {
 }
 
 function Win7Btns() {
+  const isMac = /Macintosh|Mac OS X/i.test(navigator.userAgent);
+
+  if (isMac) {
+    return (
+      <div className="mac-btns">
+        <button className="mac-btn mac-btn--close" title="Close" />
+        <button className="mac-btn mac-btn--min" title="Minimize" />
+        <button className="mac-btn mac-btn--max" title="Zoom" />
+      </div>
+    );
+  }
+
   return (
     <div className="win7-btns">
-      <button className="win7-btn win7-btn--min" title="Minimize">
-        &#8211;
-      </button>
-      <button className="win7-btn win7-btn--max" title="Maximize">
-        &#9633;
-      </button>
-      <button className="win7-btn win7-btn--close" title="Close">
-        &#10005;
-      </button>
+      <button className="win7-btn win7-btn--min" title="Minimize" />
+      <button className="win7-btn win7-btn--max" title="Maximize" />
+      <button className="win7-btn win7-btn--close" title="Close" />
     </div>
   );
 }
@@ -889,7 +895,8 @@ export default function Index() {
     <>
       <div className="desktop">
         <div className="explorer-window">
-          <div className="titlebar">
+          {/*<div className="titlebar">*/}
+          <div className={`titlebar ${/Macintosh|Mac OS X/i.test(navigator.userAgent) ? "titlebar--mac" : ""}`}>
             <Win7Btns />
             <div className="titlebar-left">
               <FolderIcon size={16} />
