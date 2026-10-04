@@ -481,7 +481,7 @@ function AboutPane({ onDownloadCV }) {
               </span>
               <span className="meta-chip">BIUST Alumnus</span>
               <a
-                href="/assets/documents/Loago_Moremi - CV.pdf"
+                href="/assets/documents/Loago_Moremi_CV.pdf"
                 download
                 onClick={onDownloadCV}
                 className="toolbar-btn toolbar-btn--primary"
