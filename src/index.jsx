@@ -1,11 +1,12 @@
 import "./styles/index.css";
 import { useState, useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import {
-  faEnvelope,
   faLocationPin,
-  faDownload,
+  faArrowUpRightFromSquare,
+  faCaretRight,
+  faCaretDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { projects } from "./data/projects";
 import { skills } from "./data/skills";
@@ -20,361 +21,77 @@ import {
   TrayVolumeIcon,
 } from "./components/Win7TaskbarIcons";
 
-const SIDEBAR_COMPUTER = [
-  {
-    name: "My Computer",
-    icon: (
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-        <rect
-          x="0.5"
-          y="0.5"
-          width="13"
-          height="9"
-          rx="1"
-          fill="#6898d0"
-          stroke="#4a78b8"
-          strokeWidth="0.7"
-        />
-        <rect x="1.5" y="1.5" width="11" height="7" rx="0.5" fill="#a8c8f0" />
-        <rect x="3.5" y="10" width="7" height="1.5" rx="0.5" fill="#5a88c0" />
-        <rect x="2" y="11.5" width="10" height="1" rx="0.5" fill="#4a78b8" />
-      </svg>
-    ),
-  },
-  {
-    name: "Network",
-    icon: (
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-        <circle
-          cx="7"
-          cy="3"
-          r="2"
-          fill="#5a88c0"
-          stroke="#3a68a8"
-          strokeWidth="0.6"
-        />
-        <circle
-          cx="2.5"
-          cy="11"
-          r="1.8"
-          fill="#5a88c0"
-          stroke="#3a68a8"
-          strokeWidth="0.6"
-        />
-        <circle
-          cx="11.5"
-          cy="11"
-          r="1.8"
-          fill="#5a88c0"
-          stroke="#3a68a8"
-          strokeWidth="0.6"
-        />
-        <line
-          x1="7"
-          y1="5"
-          x2="2.5"
-          y2="9.2"
-          stroke="#3a68a8"
-          strokeWidth="0.9"
-        />
-        <line
-          x1="7"
-          y1="5"
-          x2="11.5"
-          y2="9.2"
-          stroke="#3a68a8"
-          strokeWidth="0.9"
-        />
-      </svg>
-    ),
-  },
-  {
-    name: "Local Disk (C:)",
-    icon: (
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-        <rect
-          x="1"
-          y="3"
-          width="12"
-          height="8"
-          rx="1"
-          fill="#c8d8e8"
-          stroke="#8a9ab8"
-          strokeWidth="0.7"
-        />
-        <rect x="1" y="3" width="12" height="3" rx="1" fill="#a8b8d0" />
-        <circle cx="11" cy="4.5" r="0.8" fill="#d0e8f8" />
-        <rect x="3" y="8" width="5" height="1" rx="0.5" fill="#6888aa" />
-      </svg>
-    ),
-  },
-  {
-    name: "DVD Drive (D:)",
-    icon: (
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-        <circle
-          cx="7"
-          cy="7"
-          r="6"
-          fill="#d8d8d8"
-          stroke="#a0a0a8"
-          strokeWidth="0.7"
-        />
-        <circle
-          cx="7"
-          cy="7"
-          r="3.5"
-          fill="none"
-          stroke="#b0b8c8"
-          strokeWidth="0.5"
-        />
-        <circle cx="7" cy="7" r="1.2" fill="#8898b0" />
-        <path
-          d="M3 4.5Q7 2 11 4.5"
-          stroke="rgba(100,130,180,0.4)"
-          strokeWidth="0.8"
-          fill="none"
-        />
-      </svg>
-    ),
-  },
-  {
-    name: "Removable (E:)",
-    icon: (
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-        <rect
-          x="4"
-          y="1"
-          width="6"
-          height="10"
-          rx="1"
-          fill="#c8c8d8"
-          stroke="#8888a0"
-          strokeWidth="0.7"
-        />
-        <rect x="5.5" y="2.5" width="3" height="1.5" rx="0.5" fill="#8888a0" />
-        <rect
-          x="3"
-          y="11"
-          width="8"
-          height="2"
-          rx="0.5"
-          fill="#a0a0b8"
-          stroke="#7878a0"
-          strokeWidth="0.5"
-        />
-      </svg>
-    ),
-  },
-];
-
 const FAVORITE_LINKS = [
   {
     name: "Desktop",
-    icon: (
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-        <rect
-          x="0.5"
-          y="0.5"
-          width="12"
-          height="9"
-          rx="1"
-          fill="#7aaac8"
-          stroke="#4a8ab8"
-          strokeWidth="0.8"
-        />
-        <rect x="3" y="10" width="7" height="2" rx="0.5" fill="#7aaac8" />
-        <rect x="1" y="12" width="11" height="0.8" rx="0.4" fill="#4a8ab8" />
-      </svg>
-    ),
-  },
-  {
-    name: "Recent Places",
-    icon: (
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-        <circle
-          cx="6.5"
-          cy="6.5"
-          r="5.5"
-          stroke="#7aaac8"
-          strokeWidth="0.9"
-          fill="none"
-        />
-        <path
-          d="M6.5 3.5V6.5L8.5 8"
-          stroke="#7aaac8"
-          strokeWidth="0.9"
-          strokeLinecap="round"
-          fill="none"
-        />
-      </svg>
-    ),
+    icon: "/assets/icons/desktop.png",
   },
   {
     name: "Downloads",
-    icon: (
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-        <path
-          d="M6.5 1v8M3.5 6.5l3 3 3-3"
-          stroke="#7aaac8"
-          strokeWidth="0.9"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          fill="none"
-        />
-        <path
-          d="M1 11h11"
-          stroke="#7aaac8"
-          strokeWidth="0.9"
-          strokeLinecap="round"
-        />
-      </svg>
-    ),
+    icon: "/assets/icons/downloads.png",
   },
   {
-    name: "Public",
-    icon: (
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-        <circle
-          cx="6.5"
-          cy="4"
-          r="2.5"
-          stroke="#7aaac8"
-          strokeWidth="0.9"
-          fill="none"
-        />
-        <path
-          d="M1.5 12c0-2.8 2.2-5 5-5s5 2.2 5 5"
-          stroke="#7aaac8"
-          strokeWidth="0.9"
-          strokeLinecap="round"
-          fill="none"
-        />
-      </svg>
-    ),
+    name: "Recent Places",
+    icon: "/assets/icons/recent.png",
   },
 ];
 
-const PANES = [
-  "This User",
-  "Drivers",
-  "Program Files",
-  "Event Logs",
-  "Network",
+const LIBRARY_LINKS = [
+  {
+    name: "This User",
+    icon: "/assets/icons/user.png",
+  },
+  {
+    name: "Drivers",
+    icon: "/assets/icons/drivers.png",
+  },
+  {
+    name: "Program Files",
+    icon: "/assets/icons/program_files.png",
+  },
+  {
+    name: "Event Logs",
+    icon: "/assets/icons/xp.png",
+  },
 ];
 
-const PANE_FILES = {
-  "This User": [
-    { name: "profile", ext: ".jpg" },
-    { name: "bio", ext: ".txt" },
-    { name: "cv", ext: ".pdf" },
-  ],
-  Drivers: [
-    { name: "frontend", ext: ".dll" },
-    { name: "backend", ext: ".dll" },
-    { name: "tools", ext: ".dll" },
-  ],
-  "Program Files": [
-    { name: "copus", ext: ".exe" },
-    { name: "brAInwave", ext: ".exe" },
-  ],
-  "Event Logs": [{ name: "debswana-2025", ext: ".log" }],
-  Network: [
-    { name: "email", ext: ".lnk" },
-    { name: "github", ext: ".lnk" },
-    { name: "linkedin", ext: ".lnk" },
-  ],
-};
+const SIDEBAR_COMPUTER = [
+  {
+    name: "Local Disk (C:)",
+    icon: "/assets/icons/c_drive.png",
+  },
+  {
+    name: "DVD Drive (D:)",
+    icon: "/assets/icons/dvd_drive.png",
+  },
+];
 
-const EXT_COLORS = {
-  ".exe": { bg: "#e8f0d8", border: "#88b040", fill: "#4a8020" },
-  ".dll": { bg: "#e8eaf8", border: "#7080c0", fill: "#3a4aaa" },
-  ".log": { bg: "#fef8e8", border: "#d4aa40", fill: "#8a6000" },
-  ".lnk": { bg: "#e8f4fe", border: "#60a8d8", fill: "#1a6aaa" },
-  ".jpg": { bg: "#fce8f4", border: "#d080b0", fill: "#a03080" },
-  ".txt": { bg: "#f0f0f0", border: "#a0a0a0", fill: "#505050" },
-  ".pdf": { bg: "#fce8e8", border: "#e08080", fill: "#c03030" },
-};
-
-function FileIcon({ ext, size = 13 }) {
-  const c = EXT_COLORS[ext] || EXT_COLORS[".txt"];
+function ComputerIcon() {
   return (
-    <svg width={size} height={size} viewBox="0 0 13 13" fill="none">
-      <rect
-        x="1"
-        y="1"
-        width="11"
-        height="11"
-        rx="1"
-        fill={c.bg}
-        stroke={c.border}
-        strokeWidth="0.8"
-      />
-      <rect
-        x="3"
-        y="4"
-        width="7"
-        height="1"
-        rx="0.5"
-        fill={c.fill}
-        fillOpacity="0.8"
-      />
-      <rect
-        x="3"
-        y="6.5"
-        width="5"
-        height="1"
-        rx="0.5"
-        fill={c.fill}
-        fillOpacity="0.8"
-      />
-      <rect
-        x="3"
-        y="9"
-        width="6"
-        height="1"
-        rx="0.5"
-        fill={c.fill}
-        fillOpacity="0.8"
-      />
-    </svg>
+    <img 
+      src="/assets/icons/computa.png" 
+      alt="" 
+    className="sidebar-link-icon" />
   );
 }
 
-function ChevronIcon({ open }) {
-  return (
-    <svg
-      width="10"
-      height="10"
-      viewBox="0 0 10 10"
-      fill="none"
-      style={{
-        transform: open ? "rotate(90deg)" : "rotate(0deg)",
-        transition: "transform 150ms ease",
-        flexShrink: 0,
-      }}
-    >
-      <path
-        d="M3 2l4 3-4 3"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-    </svg>
-  );
-}
+const breadcrumb = (pane) => (
+  <>
+    <ComputerIcon/>
+    <FontAwesomeIcon icon={faCaretRight} />
+    <span>Loago Moremi</span>
+    <FontAwesomeIcon icon={faCaretRight} />
+    <span>{pane}</span>
+  </>
+);
 
-const breadcrumb = (pane) => `Computer › Loago Moremi › ${pane}`;
-
-function FolderIcon({ size = 16 }) {
+function FolderIcon() {
   return (
-    <svg width={size} height={size} viewBox="0 0 16 14" fill="none">
-      <rect x="0" y="3" width="16" height="11" rx="1.5" fill="#f0b429" />
-      <rect x="0" y="5" width="16" height="9" rx="1.5" fill="#fac740" />
-      <rect x="0" y="3" width="6" height="3" rx="1.5" fill="#f0b429" />
-    </svg>
+    <img
+      src="/assets/icons/Fe.webp"
+      alt=""
+      className="sidebar-link-icon" 
+    />
   );
 }
 
@@ -400,7 +117,7 @@ function Win7Btns() {
   );
 }
 
-function AboutPane({ onDownloadCV }) {
+function AboutPane() {
   return (
     <>
       <div className="pane-header">
@@ -482,13 +199,17 @@ function AboutPane({ onDownloadCV }) {
               <span className="meta-chip">BIUST Alumnus</span>
               <a
                 href="/assets/documents/Loago_Moremi_CV.pdf"
-                download
-                onClick={onDownloadCV}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.open("/assets/documents/Loago_Moremi_CV.pdf", "_blank", "noopener,noreferrer");
+                }}
                 className="toolbar-btn toolbar-btn--primary"
                 style={{ display: "inline-flex", alignItems: "center", gap: 5 }}
+                
               >
-                <FontAwesomeIcon icon={faDownload} style={{ fontSize: 10 }} />
-                Download CV
+                
+                <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+                View my CV
               </a>
             </div>
           </div>
@@ -498,7 +219,7 @@ function AboutPane({ onDownloadCV }) {
   );
 }
 
-function SkillsPane() {
+function SkillsPane({ onSelect, selectedItem, playClick }) {
   return (
     <>
       <div className="pane-header">
@@ -514,7 +235,20 @@ function SkillsPane() {
               <p className="skills-group-title">{category}</p>
               <div className="skills-tags">
                 {items.map((skill) => (
-                  <span key={skill} className="skill-tag">
+                  <span
+                    key={skill}
+                    className={`skill-tag ${
+                      selectedItem?.name === skill ? "selected" : ""
+                    }`}
+                    onClick={() => {
+                      playClick();
+                      onSelect({
+                        name: skill,
+                        itemType: "skill",
+                        category,
+                      })
+                    }}
+                  >
                     {skill}
                   </span>
                 ))}
@@ -527,7 +261,7 @@ function SkillsPane() {
   );
 }
 
-function ProjectsPane() {
+function ProjectsPane({ onSelect, selectedItem, playClick }) {
   const completedProjects = projects.filter(
     (project) => project.status === "completed",
   );
@@ -537,7 +271,19 @@ function ProjectsPane() {
   );
 
   const renderProject = (project) => (
-    <div key={project.id} className="project-row">
+    <div
+      key={project.id}
+      className={`project-row ${
+        selectedItem?.id === project.id ? "selected" : ""
+      }`}
+      onClick={() => {
+        playClick();
+        onSelect({
+          ...project,
+          itemType: "project",
+        });
+      }}
+    >
       <div>
         <div className="project-label-row">
           <span
@@ -599,7 +345,7 @@ function ProjectsPane() {
     </>
   );
 }
-function ExperiencePane() {
+function ExperiencePane({ onSelect, selectedItem, playClick }) {
   return (
     <>
       <div className="pane-header">
@@ -609,7 +355,19 @@ function ExperiencePane() {
       <div className="pane-content">
         <div className="experience-list">
           {experience.map((job) => (
-            <div key={job.id} className="exp-row">
+            <div
+              key={job.id}
+              className={`exp-row ${
+                selectedItem?.id === job.id ? "selected" : ""
+              }`}
+              onClick={() => {
+                playClick();
+                onSelect({
+                  ...job,
+                  itemType: "experience",
+                });
+              }}
+            >
               <img
                 src={job.logo}
                 alt={job.title}
@@ -629,82 +387,6 @@ function ExperiencePane() {
               </div>
             </div>
           ))}
-        </div>
-      </div>
-    </>
-  );
-}
-
-function ContactPane() {
-  return (
-    <>
-      <div className="pane-header">
-        <span className="pane-title">Network</span>
-        <span className="pane-count">4 items</span>
-      </div>
-      <div className="pane-content">
-        <div className="contact-layout">
-          <p className="contact-intro">
-            Got a project in mind? I'd love to hear about it. Reach out via
-            email or find me on my socials.
-          </p>
-          <div className="contact-list">
-            <div className="contact-row">
-              <div className="contact-icon-wrap">
-                <FontAwesomeIcon icon={faEnvelope} />
-              </div>
-              <div>
-                <p className="contact-label">Email</p>
-                <a
-                  href="mailto:loagomoremi@gmail.com"
-                  className="contact-value"
-                >
-                  loagomoremi@gmail.com
-                </a>
-              </div>
-            </div>
-            <div className="contact-row">
-              <div className="contact-icon-wrap">
-                <FontAwesomeIcon icon={faGithub} />
-              </div>
-              <div>
-                <p className="contact-label">GitHub</p>
-                <a
-                  href="https://github.com/loag0"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="contact-value"
-                >
-                  loag0
-                </a>
-              </div>
-            </div>
-            <div className="contact-row">
-              <div className="contact-icon-wrap">
-                <FontAwesomeIcon icon={faLinkedin} />
-              </div>
-              <div>
-                <p className="contact-label">LinkedIn</p>
-                <a
-                  href="https://www.linkedin.com/in/loago-moremi"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="contact-value"
-                >
-                  Loago Moremi
-                </a>
-              </div>
-            </div>
-            <div className="contact-row">
-              <div className="contact-icon-wrap">
-                <FontAwesomeIcon icon={faLocationPin} />
-              </div>
-              <div>
-                <p className="contact-label">Location</p>
-                <p className="contact-plain">Tati Siding, BW</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </>
@@ -775,7 +457,6 @@ export default function Index() {
   const [historyIndex, setHistoryIndex] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
-  const [expandedFolders, setExpandedFolders] = useState({ "This User": true });
   const [clock, setClock] = useState(() => {
     const now = new Date();
     return {
@@ -786,6 +467,90 @@ export default function Index() {
       date: now.toLocaleDateString("en-GB"),
     };
   });
+
+  const [burning, setBurning] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [commandMenu, setCommandMenu] = useState(null);
+
+  const getStatus = () => {
+    if (selectedItem) {
+      switch (selectedItem.itemType) {
+        case "project":
+          return {
+            name: selectedItem.title,
+            type: selectedItem.label,
+            icon: "/assets/icons/program_files.png",
+            fields: [
+              ["Date", selectedItem.date || "-"],
+              [
+                "Status",
+                selectedItem.status === "completed"
+                  ? "Completed"
+                  : "Currently Exploring",
+              ],
+            ],
+          };
+
+        case "experience":
+          return {
+            name: selectedItem.title,
+            type: "Experience",
+            icon: selectedItem.logo || "/assets/icons/xp.png",
+            fields: [["Date", selectedItem.date || "-"]],
+          };
+
+        case "skill":
+          return {
+            name: selectedItem.name,
+            type: "Skill",
+            icon: "/assets/icons/drivers.png",
+            fields: [["Category", selectedItem.category || "-"]],
+          };
+
+        default:
+          return {
+            name: "Unknown Item",
+            type: "File",
+            details: [],
+            tags: [],
+          };
+      }
+    }
+
+    const folderInfo = {
+      "This User": {
+        count: 4,
+        icon: "/assets/icons/user.png",
+      },
+      Drivers: {
+        count: Object.values(skills).flat().length,
+        icon: "/assets/icons/drivers.png",
+      },
+      "Program Files": {
+        count: projects.length,
+        icon: "/assets/icons/program_files.png",
+      },
+      "Event Logs": {
+        count: experience.length,
+        icon: "/assets/icons/xp.png",
+      },
+      Network: {
+        count: 4,
+        icon: "/assets/icons/network.png",
+      },
+    };
+
+    const info = folderInfo[activePane];
+
+    return {
+      name: activePane,
+      type: "Folder",
+      icon: info?.icon || "/assets/icons/folder.png",
+      fields: [["Items", `${info?.count ?? 0} items`]],
+    };
+  };
+
+  const status = getStatus();
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -801,20 +566,10 @@ export default function Index() {
     return () => clearInterval(id);
   }, []);
 
-  const toggleFolder = (pane) => {
-    setExpandedFolders((prev) => ({ ...prev, [pane]: !prev[pane] }));
-  };
   const sidebarRef = useRef(null);
   const mobileMenuButtonRef = useRef(null);
   const clickSoundRef = useRef(null);
-
-  const paneCount = {
-    "This User": "4 items |",
-    Drivers: `${Object.values(skills).flat().length} items |`,
-    "Program Files": `${projects.length} items |`,
-    "Event Logs": `${experience.length} items |`,
-    Network: "4 items |",
-  };
+  const fireSoundRef = useRef(null);
 
   useEffect(() => {
     clickSoundRef.current = new Audio("/assets/audio/mouse-click.mp3");
@@ -830,53 +585,138 @@ export default function Index() {
     } catch (_) {}
   };
 
-  const dingSoundRef = useRef(null);
-
   useEffect(() => {
-    dingSoundRef.current = new Audio("/assets/audio/ding.wav");
-    dingSoundRef.current.volume = 0.6;
+    fireSoundRef.current = new Audio("/assets/audio/fire.mp3");
+    fireSoundRef.current.volume = 0.7;
   }, []);
 
-  const playDing = () => {
-    if (!dingSoundRef.current) return;
+  const playFireSound = () => {
+    if (!fireSoundRef.current) return;
 
-    dingSoundRef.current.currentTime = 0;
-    dingSoundRef.current.play().catch(() => {});
+    fireSoundRef.current.currentTime = 0;
+    fireSoundRef.current.play().catch(() => {});
+
+    window.setTimeout(() => {
+      fireSoundRef.current?.pause();
+      if (fireSoundRef.current) {
+        fireSoundRef.current.currentTime = 0;
+      }
+    }, 3500);
   };
 
   const navigateTo = (pane) => {
     if (pane === activePane) return;
+
     playClick();
+    setSelectedItem(null);
+    setCommandMenu(null);
+
     setIsNavigating(true);
+
     const newHistory = [...history.slice(0, historyIndex + 1), pane];
+
     setHistory(newHistory);
     setHistoryIndex(newHistory.length - 1);
     setActivePane(pane);
+
     window.setTimeout(() => setIsNavigating(false), 280);
   };
 
   const goBack = () => {
     if (historyIndex <= 0) return;
+
     playClick();
+    setSelectedItem(null);
+    setCommandMenu(null);
+
     const newIndex = historyIndex - 1;
+
     setIsNavigating(true);
     setHistoryIndex(newIndex);
     setActivePane(history[newIndex]);
+
     window.setTimeout(() => setIsNavigating(false), 280);
   };
 
   const goForward = () => {
     if (historyIndex >= history.length - 1) return;
+
     playClick();
+    setSelectedItem(null);
+    setCommandMenu(null);
+
     const newIndex = historyIndex + 1;
+
     setIsNavigating(true);
     setHistoryIndex(newIndex);
     setActivePane(history[newIndex]);
+    
     window.setTimeout(() => setIsNavigating(false), 280);
   };
 
   const canBack = historyIndex > 0;
   const canForward = historyIndex < history.length - 1;
+
+  const handleCommand = (command) => {
+    switch (command) {
+      case "organize":
+        setCommandMenu((current) =>
+          current === "organize" ? null : "organize",
+        );
+        break;
+
+      case "view":
+        //setViewMode((current) => (current === "icons" ? "details" : "icons"));
+        setCommandMenu(null);
+        break;
+
+      case "open":
+        if (selectedItem?.link) {
+          window.open(selectedItem.link, "_blank", "noopener,noreferrer");
+        }
+        break;
+
+      case "preview":
+        //setPreviewOpen((current) => !current);
+        break;
+
+      case "properties":
+        //setPropertiesOpen(true);
+        break;
+
+      case "github":
+        window.open("https://github.com/loag0", "_blank");
+        break;
+
+      case "print":
+        window.print();
+        break;
+
+      case "help":
+        //setHelpOpen(true);
+        break;
+
+      case "burn":
+        playFireSound();
+
+        setBurning(false);
+
+        requestAnimationFrame(() => {
+          setBurning(true);
+        });
+
+        window.setTimeout(() => {
+          setBurning(false);
+        }, 3500);
+
+        break;
+
+      default:
+        break;
+    }
+
+    setCommandMenu(null);
+  };
 
   useEffect(() => {
     const handler = (e) => {
@@ -896,12 +736,10 @@ export default function Index() {
       <div className="desktop">
         <div className="explorer-window">
           {/*<div className="titlebar">*/}
-          <div className={`titlebar ${/Macintosh|Mac OS X/i.test(navigator.userAgent) ? "titlebar--mac" : ""}`}>
+          <div
+            className={`titlebar ${/Macintosh|Mac OS X/i.test(navigator.userAgent) ? "titlebar--mac" : ""}`}
+          >
             <Win7Btns />
-            <div className="titlebar-left">
-              <FolderIcon size={16} />
-              {activePane} · Loago Moremi
-            </div>
             <button
               ref={mobileMenuButtonRef}
               className={`mobile-menu-btn ${sidebarOpen ? "mobile-menu-btn--open" : ""}`}
@@ -917,40 +755,118 @@ export default function Index() {
           </div>
 
           <div className="toolbar">
-            <button
-              className="toolbar-btn"
-              onClick={goBack}
-              disabled={!canBack}
-              style={{
-                opacity: canBack ? 1 : 0.4,
-              }}
-            >
-              &#9664; Back
-            </button>
-            <button
-              className="toolbar-btn"
-              onClick={goForward}
-              disabled={!canForward}
-              style={{
-                opacity: canForward ? 1 : 0.4,
-              }}
-            >
-              Forward &#9654;
-            </button>
-            <div className="toolbar-sep" />
-            <button
-              className="toolbar-btn"
-              onClick={() => navigateTo("This User")}
-            >
-              &#9650; Up
-            </button>
-            <div className="toolbar-sep" />
+            <div className="toolbar-nav-group">
+              <button
+                className="toolbar-nav toolbar-nav--back"
+                onClick={goBack}
+                disabled={!canBack}
+                aria-label="Back"
+              />
+              <button
+                className="toolbar-nav toolbar-nav--fwd"
+                onClick={goForward}
+                disabled={!canForward}
+                aria-label="Forward"
+              />
+            </div>
+
+            <div className="addrbar">
+              <div className="addrbar-path">{breadcrumb(activePane)}</div>
+
+              <div className="addrbar-search">
+                <span>Search Loago Moremi...</span>
+
+                <img
+                  src="/assets/icons/search.png"
+                  alt=""
+                  className="addrbar-search-icon"
+                />
+              </div>
+            </div>
           </div>
 
-          <div className="addrbar">
-            <span className="addrbar-label">Address</span>
-            <div className="addrbar-path">{breadcrumb(activePane)}</div>
-            <div className="addrbar-search">Search Loago Moremi...</div>
+          <div className="command-bar">
+            <div className="command-dropdown">
+              <button
+                className="command-button"
+                onClick={() => handleCommand("organize")}
+              >
+                Organize <FontAwesomeIcon icon={faCaretDown} />
+              </button>
+
+              {commandMenu === "organize" && (
+                <div className="command-menu">
+                  <button onClick={() => window.location.reload()}>
+                    Refresh
+                  </button>
+
+                  <button onClick={() => setSelectedItem(null)}>
+                    Clear Selection
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <button
+              className="command-button"
+              onClick={() => handleCommand("view")}
+            >
+              View <FontAwesomeIcon icon={faCaretDown} />
+            </button>
+
+            <button
+              className="command-button"
+              onClick={() => handleCommand("open")}
+              disabled={!selectedItem?.link}
+            >
+              Open
+            </button>
+
+            <button
+              className="command-button"
+              onClick={() => handleCommand("preview")}
+            >
+              Preview
+            </button>
+
+            <button
+              className="command-button"
+              onClick={() => handleCommand("properties")}
+            >
+              Properties
+            </button>
+
+            {activePane === "Program Files" && (
+              <button
+                className="command-button"
+                onClick={() => handleCommand("github")}
+              >
+                GitHub
+              </button>
+            )}
+
+            {activePane === "Event Logs" && (
+              <button
+                className="command-button"
+                onClick={() => handleCommand("print")}
+              >
+                Print
+              </button>
+            )}
+
+            <button
+              className="command-button"
+              onClick={() => handleCommand("help")}
+            >
+              Help
+            </button>
+
+            <button
+              className="command-button command-button--burn"
+              onClick={() => handleCommand("burn")}
+            >
+              Burn
+            </button>
           </div>
 
           <div
@@ -964,108 +880,183 @@ export default function Index() {
               className={`sidebar ${sidebarOpen ? "mobile-open" : ""}`}
               ref={sidebarRef}
             >
-              <div className="sidebar-section-head">Favorite Links</div>
-              {FAVORITE_LINKS.map((link) => (
-                <div
-                  key={link.name}
-                  className="sidebar-link-item"
-                  onClick={() => navigateTo("This User")}
-                >
-                  {link.icon}
-                  <span>{link.name}</span>
-                </div>
-              ))}
-              <div className="sidebar-divider" />
-              <div className="sidebar-section-head">Folders</div>
-              {PANES.map((pane) => (
-                <div key={pane}>
+              {/* Favorites */}
+              <div className="sidebar-section-title">
+                <span className="sidebar-section-icon">
+                  <img src="/assets/icons/favorites.ico" />
+                </span>
+                <span>Favorites</span>
+              </div>
+
+              <div className="sidebar-group sidebar-group--indented">
+                {FAVORITE_LINKS.map((link) => (
                   <div
-                    className={`sidebar-item ${activePane === pane ? "active" : ""}`}
+                    key={link.name}
+                    className="sidebar-link-item"
                     onClick={() => {
-                      navigateTo(pane);
-                      toggleFolder(pane);
+                      if (link.name === "Desktop") {
+                        navigateTo("This User");
+                      }
                     }}
                   >
-                    <span
-                      className="sidebar-chevron"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleFolder(pane);
+                    <img src={link.icon} alt="" className="sidebar-link-icon" />
+                    <span>{link.name}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Libraries */}
+              <div className="sidebar-section-title sidebar-section-title--libraries">
+                <span className="sidebar-section-icon">
+                  <FolderIcon size={14} />
+                </span>
+                <span>Libraries</span>
+              </div>
+
+              <div className="sidebar-group sidebar-group--indented">
+                {LIBRARY_LINKS.map((pane) => (
+                  <div key={pane.name}>
+                    <div
+                      className={`sidebar-item ${
+                        activePane === pane.name ? "active" : ""
+                      }`}
+                      onClick={() => {
+                        navigateTo(pane.name);
                       }}
                     >
-                      <ChevronIcon open={!!expandedFolders[pane]} />
-                    </span>
-                    <FolderIcon size={15} />
-                    {pane}
-                  </div>
-                  {expandedFolders[pane] && (
-                    <div className="sidebar-file-list">
-                      {PANE_FILES[pane].map((file) => (
-                        <div
-                          key={file.name}
-                          className="sidebar-file-item"
-                          onClick={() => navigateTo(pane)}
-                        >
-                          <FileIcon ext={file.ext} size={13} />
-                          <span className="sidebar-file-name">
-                            {file.name}
-                            <span className="sidebar-file-ext">{file.ext}</span>
-                          </span>
-                        </div>
-                      ))}
+                      <img
+                        src={pane.icon}
+                        alt=""
+                        className="sidebar-link-icon sidebar-library-icon"
+                      />
+                      <span>{pane.name}</span>
                     </div>
-                  )}
-                </div>
-              ))}
-              <div className="sidebar-divider" />
-              <div className="sidebar-section-head">My Computer</div>
-              {SIDEBAR_COMPUTER.map((item) => (
-                <div key={item.name} className="sidebar-link-item">
-                  {item.icon}
-                  <span>{item.name}</span>
-                </div>
-              ))}
-            </div>
+                  </div>
+                ))}
+              </div>
 
-            <div
-              className={`mobile-sidebar-overlay ${sidebarOpen ? "open" : ""}`}
-              onClick={() => setSidebarOpen(false)}
-              aria-hidden="true"
-            />
+              {/* Computer */}
+              <div className="sidebar-section-title sidebar-section-title--computer">
+                <span className="sidebar-section-icon">
+                  <img
+                    src="/assets/icons/computa.png"
+                    alt=""
+                    className="sidebar-link-icon"
+                  />
+                </span>
+                <span>Computer</span>
+              </div>
+
+              <div className="sidebar-group sidebar-group--indented">
+                {SIDEBAR_COMPUTER.map((item) => (
+                  <div
+                    key={item.name}
+                    className={`sidebar-item ${
+                      activePane === item.name ? "active" : ""
+                    }`}
+                    onClick={() => navigateTo("This User")}
+                  >
+                    <span className="sidebar-chevron sidebar-chevron--empty" />
+
+                    <img
+                      src={item.icon}
+                      alt=""
+                      className="sidebar-link-icon sidebar-library-icon"
+                    />
+
+                    <span className="sidebar-item-label">{item.name}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="sidebar-section-title sidebar-section-title--network">
+                <span className="sidebar-section-icon">
+                  <img
+                    src="/assets/icons/network.png"
+                    alt=""
+                    className="sidebar-link-icon"
+                  />
+                </span>
+                <span>Network</span>
+              </div>
+            </div>
 
             <div className="main-pane">
               <div key={activePane} className="pane-shell">
-                {activePane === "This User" && (
-                  <AboutPane onDownloadCV={playDing} />
+                {activePane === "This User" && <AboutPane />}
+
+                {activePane === "Drivers" && (
+                  <SkillsPane
+                    onSelect={setSelectedItem}
+                    selectedItem={selectedItem}
+                    playClick={playClick}
+                  />
                 )}
-                {activePane === "Drivers" && <SkillsPane />}
-                {activePane === "Program Files" && <ProjectsPane />}
-                {activePane === "Event Logs" && <ExperiencePane />}
-                {activePane === "Network" && <ContactPane />}
+
+                {activePane === "Program Files" && (
+                  <ProjectsPane
+                    onSelect={setSelectedItem}
+                    selectedItem={selectedItem}
+                    playClick={playClick}
+                  />
+                )}
+
+                {activePane === "Event Logs" && (
+                  <ExperiencePane
+                    onSelect={setSelectedItem}
+                    selectedItem={selectedItem}
+                    playClick={playClick}
+                  />
+                )}
               </div>
             </div>
           </div>
 
           <div className="statusbar">
-            <span>{paneCount[activePane]}</span>
+            <div className="statusbar-icon">
+              <img src={status.icon} alt="" />
+            </div>
+
+            <div className="statusbar-info">
+              <div className="statusbar-row">
+                <span className="statusbar-key">Name</span>
+                <strong className="statusbar-value">{status.name}</strong>
+              </div>
+
+              <div className="statusbar-row">
+                <span className="statusbar-key">Type</span>
+                <span className="statusbar-value">{status.type}</span>
+              </div>
+
+              {status.fields.map(([key, value]) => (
+                <div className="statusbar-row" key={key}>
+                  <span className="statusbar-key">{key}</span>
+                  <span className="statusbar-value">{value}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         <div className="icons8-credit">
-        <a
-          href="https://icons8.com/icon/17854/windows-xp"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Windows XP
-        </a>{" "}
-        icon by{" "}
-        <a
-          target="_blank" href="https://icons8.com">
-          Icons8
-        </a>
+          <a
+            href="https://icons8.com/icon/17854/windows-xp"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Windows XP
+          </a>{" "}
+          icon by{" "}
+          <a target="_blank" href="https://icons8.com">
+            Icons8
+          </a>
+        </div>
       </div>
-      </div>
+      {burning && (
+        <div className="burn-overlay">
+          <img src="/assets/burn-elmo.gif" alt="" />
+        </div>
+      )}
       <Taskbar clockTime={clock.time} clockDate={clock.date} />
     </>
   );

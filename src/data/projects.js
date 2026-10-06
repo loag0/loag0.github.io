@@ -16,6 +16,7 @@ export const projects = [
     link: "https://github.com/loag0/brAInwave",
     label: "Mobile App",
     status: "completed",
+    date: "Aug 2025 - May 2026",
   },
   {
     id: 2,
@@ -26,6 +27,7 @@ export const projects = [
     link: "https://github.com/loag0/copus",
     label: "Web App",
     status: "completed",
+    date: "Nov 2025 - Jan 2026",
   },
   {
     id: 3,
@@ -36,6 +38,7 @@ export const projects = [
     link: "https://github.com/loag0/proxi.NET",
     label: "Mobile App",
     status: "exploring",
+    date: "August 2026 - Present",
     visibility: "private",
   },
 ];
