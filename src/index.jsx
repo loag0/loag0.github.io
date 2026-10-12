@@ -1,104 +1,82 @@
 import "./styles/index.css";
 import { useState, useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import {
-  faLocationPin,
-  faArrowUpRightFromSquare,
   faCaretRight,
   faCaretDown,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { projects } from "./data/projects";
-import { skills } from "./data/skills";
-import { experience } from "./data/experience";
+import { buildTree, getNode, pickSelection } from "./model/tree.js";
 import {
-  QuickExplorerIcon,
-  QuickIEIcon,
-  QuickWMPIcon,
-  PaintIcon,
-  StartLogo,
-  TrayNetworkIcon,
-  TrayVolumeIcon,
-} from "./components/Win7TaskbarIcons";
+  FOLDERS,
+  FOLDER_ICONS,
+  getFolderConfig,
+  getGroup,
+  getView,
+  saveGroup,
+  saveView,
+  viewKey,
+} from "./model/folderConfig.js";
+import {
+  COLUMNS,
+  GROUPABLE,
+  getStatusInfo,
+  groupRows,
+  sortChildren,
+} from "./model/viewModel.js";
+import { DEFAULT_PREVIEW } from "./model/layout.js";
+import { buildSearchIndex, searchIndex } from "./model/search.js";
+import { isCoarse } from "./components/pointer.js";
+import FolderView from "./components/FolderView.jsx";
+import Preview from "./components/Preview.jsx";
+import SearchResults from "./components/SearchResults.jsx";
+import SplitPane from "./components/SplitPane.jsx";
+import NotFoundDialog from "./components/NotFoundDialog.jsx";
+import Taskbar from "./components/Taskbar.jsx";
+import { NodeIcon } from "./components/Icons.jsx";
+
+const TREE = buildTree();
+const SEARCH_INDEX = buildSearchIndex(TREE);
+const START_PATH = [FOLDERS.user];
+
+const VIEW_OPTIONS = [
+  ["icons", "Large icons"],
+  ["list", "List"],
+  ["details", "Details"],
+];
 
 const FAVORITE_LINKS = [
-  {
-    name: "Desktop",
-    icon: "/assets/icons/desktop.png",
-  },
-  {
-    name: "Downloads",
-    icon: "/assets/icons/downloads.png",
-  },
-  {
-    name: "Recent Places",
-    icon: "/assets/icons/recent.png",
-  },
+  { name: "Desktop", icon: "/assets/icons/desktop.png" },
+  { name: "Downloads", icon: "/assets/icons/downloads.png" },
+  { name: "Recent Places", icon: "/assets/icons/recent.png" },
 ];
 
-const LIBRARY_LINKS = [
-  {
-    name: "This User",
-    icon: "/assets/icons/user.png",
-  },
-  {
-    name: "Drivers",
-    icon: "/assets/icons/drivers.png",
-  },
-  {
-    name: "Program Files",
-    icon: "/assets/icons/program_files.png",
-  },
-  {
-    name: "Event Logs",
-    icon: "/assets/icons/xp.png",
-  },
-];
+const LIBRARY_LINKS = Object.values(FOLDERS).map((name) => ({
+  name,
+  icon: FOLDER_ICONS[name],
+}));
 
 const SIDEBAR_COMPUTER = [
-  {
-    name: "Local Disk (C:)",
-    icon: "/assets/icons/c_drive.png",
-  },
-  {
-    name: "DVD Drive (D:)",
-    icon: "/assets/icons/dvd_drive.png",
-  },
+  { name: "Local Disk (C:)", icon: "/assets/icons/c_drive.png" },
+  { name: "DVD Drive (D:)", icon: "/assets/icons/dvd_drive.png" },
 ];
+
+const isMac = () => /Macintosh|Mac OS X/i.test(navigator.userAgent);
 
 function ComputerIcon() {
   return (
-    <img 
-      src="/assets/icons/computa.png" 
-      alt="" 
-    className="sidebar-link-icon" />
+    <img src="/assets/icons/computa.png" alt="" className="sidebar-link-icon" />
   );
 }
 
-const breadcrumb = (pane) => (
-  <>
-    <ComputerIcon/>
-    <FontAwesomeIcon icon={faCaretRight} />
-    <span>Loago Moremi</span>
-    <FontAwesomeIcon icon={faCaretRight} />
-    <span>{pane}</span>
-  </>
-);
-
 function FolderIcon() {
   return (
-    <img
-      src="/assets/icons/Fe.webp"
-      alt=""
-      className="sidebar-link-icon" 
-    />
+    <img src="/assets/icons/Fe.webp" alt="" className="sidebar-link-icon" />
   );
 }
 
 function Win7Btns() {
-  const isMac = /Macintosh|Mac OS X/i.test(navigator.userAgent);
-
-  if (isMac) {
+  if (isMac()) {
     return (
       <div className="mac-btns">
         <button className="mac-btn mac-btn--close" title="Close" />
@@ -117,463 +95,170 @@ function Win7Btns() {
   );
 }
 
-function AboutPane() {
+// every segment but the last one is a link back up the path
+function Breadcrumb({ path, onNavigate }) {
   return (
     <>
-      <div className="pane-header">
-        <span className="pane-title">This User</span>
-        <span className="pane-count">4 items</span>
-      </div>
-      <div className="pane-content">
-        <div className="about-layout">
-          <div className="about-photo-wrap">
-            <picture>
-              <source
-                type="image/webp"
-                srcSet="/assets/images/profile-360.webp 360w, /assets/images/profile-720.webp 720w"
-                sizes="(max-width: 768px) 140px, 180px"
-              />
-              <img
-                src="/assets/images/profile-360.webp"
-                alt="Loago Moremi"
-                width="180"
-                height="240"
-                fetchPriority="high"
-              />
-            </picture>
-            <p className="about-photo-caption">profile.jpg</p>
-          </div>
-          <div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 12,
-                flexWrap: "wrap",
-                marginBottom: 4,
-              }}
-            >
-              <h1 className="about-name" style={{ marginBottom: 0 }}>
-                Loago Moremi
-              </h1>
-            </div>
-            <p className="about-role">
-              Computer Science Graduate · Software Developer & UI Enthusiast
-            </p>
-            <div className="about-body">
-              <p>
-                I'm a computer science graduate who learns the hard way on
-                purpose. One of my favorite pastimes (maybe not so favorite) is
-                building something, breaking it, staring at the error for 20
-                minutes, then figuring out why it broke. Most of what I know
-                came from debugging stuff that had no business working in the
-                first place - including my hackintosh era.
-              </p>
-              <p>
-                I gravitated toward frontend development because I'm obsessed
-                with the way software looks, feels, and behaves. I care a lot
-                about the details that make a product enjoyable to use, and I
-                want to build software that I'd actually want to use myself. At
-                the same time, I've been expanding beyond the frontend into
-                backend development, working with Python, APIs, databases, and
-                the systems that make applications actually work.
-              </p>
-              <p>
-                I also like building things around problems I encounter in
-                everyday life, which has led me to explore everything from
-                AI-powered productivity tools to an audio converter for
-                customizing the notification sounds on my phone. I’m less
-                interested in sticking to one particular stack and more
-                interested in learning whatever I need to turn an idea into
-                something that works.
-              </p>
-            </div>
-            <div className="about-meta">
-              <span className="meta-chip">
-                <FontAwesomeIcon
-                  icon={faLocationPin}
-                  style={{ marginRight: 5, fontSize: 10 }}
-                />
-                Tati Siding, BW
-              </span>
-              <span className="meta-chip">BIUST Alumnus</span>
-              <a
-                href="/assets/documents/Loago_Moremi_CV.pdf"
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.open("/assets/documents/Loago_Moremi_CV.pdf", "_blank", "noopener,noreferrer");
-                }}
-                className="toolbar-btn toolbar-btn--primary"
-                style={{ display: "inline-flex", alignItems: "center", gap: 5 }}
-                
+      <ComputerIcon />
+      <FontAwesomeIcon icon={faCaretRight} />
+      <button className="crumb" onClick={() => onNavigate([FOLDERS.user])}>
+        Loago Moremi
+      </button>
+      {path.map((name, i) => {
+        const last = i === path.length - 1;
+        return (
+          <span key={path.slice(0, i + 1).join("/")} className="crumb-wrap">
+            <FontAwesomeIcon icon={faCaretRight} />{" "}
+            {last ? (
+              <span className="crumb-current">{name}</span>
+            ) : (
+              <button
+                className="crumb"
+                onClick={() => onNavigate(path.slice(0, i + 1))}
               >
-                
-                <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
-                View my CV
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
-
-function SkillsPane({ onSelect, selectedItem, playClick }) {
-  return (
-    <>
-      <div className="pane-header">
-        <span className="pane-title">Drivers</span>
-        <span className="pane-count">
-          {Object.values(skills).flat().length} items
-        </span>
-      </div>
-      <div className="pane-content">
-        <div className="skills-layout">
-          {Object.entries(skills).map(([category, items]) => (
-            <div key={category}>
-              <p className="skills-group-title">{category}</p>
-              <div className="skills-tags">
-                {items.map((skill) => (
-                  <span
-                    key={skill}
-                    className={`skill-tag ${
-                      selectedItem?.name === skill ? "selected" : ""
-                    }`}
-                    onClick={() => {
-                      playClick();
-                      onSelect({
-                        name: skill,
-                        itemType: "skill",
-                        category,
-                      })
-                    }}
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </>
-  );
-}
-
-function ProjectsPane({ onSelect, selectedItem, playClick }) {
-  const completedProjects = projects.filter(
-    (project) => project.status === "completed",
-  );
-
-  const exploringProjects = projects.filter(
-    (project) => project.status === "exploring",
-  );
-
-  const renderProject = (project) => (
-    <div
-      key={project.id}
-      className={`project-row ${
-        selectedItem?.id === project.id ? "selected" : ""
-      }`}
-      onClick={() => {
-        playClick();
-        onSelect({
-          ...project,
-          itemType: "project",
-        });
-      }}
-    >
-      <div>
-        <div className="project-label-row">
-          <span
-            className={`project-badge ${
-              project.label === "In Progress" ? "coming" : ""
-            }`}
-          >
-            {project.label}
+                {name}
+              </button>
+            )}
           </span>
-        </div>
-
-        <h3 className="project-name">{project.title}</h3>
-
-        <p className="project-desc">{project.description}</p>
-
-        <div className="project-tech-row">
-          {project.tech.map((t) => (
-            <span key={t} className="tech-chip">
-              {t}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {project.link && project.visibility !== "private" && (
-        <a
-          href={project.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="project-link-btn"
-        >
-          <FontAwesomeIcon icon={faGithub} style={{ width: 12, height: 12 }} />
-          View on GitHub
-        </a>
-      )}
-    </div>
-  );
-
-  return (
-    <>
-      <div className="pane-header">
-        <span className="pane-title">Program Files</span>
-        <span className="pane-count">{completedProjects.length} items</span>
-      </div>
-
-      <div className="pane-content">
-        <div className="projects-list">
-          {completedProjects.map(renderProject)}
-
-          {exploringProjects.length > 0 && (
-            <div className="projects-section-divider">
-              <span>Currently Exploring</span>
-            </div>
-          )}
-
-          {exploringProjects.map(renderProject)}
-        </div>
-      </div>
-    </>
-  );
-}
-function ExperiencePane({ onSelect, selectedItem, playClick }) {
-  return (
-    <>
-      <div className="pane-header">
-        <span className="pane-title">Event Logs</span>
-        <span className="pane-count">{experience.length} items</span>
-      </div>
-      <div className="pane-content">
-        <div className="experience-list">
-          {experience.map((job) => (
-            <div
-              key={job.id}
-              className={`exp-row ${
-                selectedItem?.id === job.id ? "selected" : ""
-              }`}
-              onClick={() => {
-                playClick();
-                onSelect({
-                  ...job,
-                  itemType: "experience",
-                });
-              }}
-            >
-              <img
-                src={job.logo}
-                alt={job.title}
-                className="exp-logo"
-                loading="lazy"
-              />
-              <div>
-                <h3 className="exp-title">{job.title}</h3>
-                <p className="exp-date">{job.date}</p>
-                <ul className="exp-bullets">
-                  {job.bullets.map((bullet, i) => (
-                    <li key={i} className="exp-bullet">
-                      {bullet}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+        );
+      })}
     </>
   );
 }
 
-function Taskbar({ clockTime, clockDate }) {
+// address bar while the search results are showing
+function SearchCrumb({ onExit }) {
   return (
-    <div className="taskbar">
-      <div className="taskbar-start-tooltip" data-tooltip="Start">
-        <div className="taskbar-start-orb">
-          <StartLogo />
-        </div>
-      </div>
-      <div className="taskbar-sep-v" />
-      <div className="taskbar-quicklaunch">
-        <button
-          className="taskbar-ql-btn"
-          tabIndex={-1}
-          data-tooltip="Internet Explorer"
-        >
-          <QuickIEIcon />
-        </button>
-        <button
-          className="taskbar-ql-btn"
-          tabIndex={-1}
-          data-tooltip="Windows Media Player"
-        >
-          <QuickWMPIcon />
-        </button>
-        <button
-          className="taskbar-window-chip taskbar-window-chip--active"
-          tabIndex={-1}
-          data-tooltip="Loago Moremi - File Explorer"
-        >
-          <QuickExplorerIcon />
-        </button>
-        <button
-          className="taskbar-ql-btn taskbar-ql-btn--show-desktop"
-          tabIndex={-1}
-          data-tooltip="Microsoft Paint"
-        >
-          <PaintIcon />
-        </button>
-      </div>
-      <div className="taskbar-sep-v" />
-      <div style={{ flex: 1 }} />
-      <div className="taskbar-sep-v" />
-      <div className="taskbar-tray">
-        <span className="taskbar-tray-text">ENG</span>
-        <span data-tooltip="Volume">
-          <TrayVolumeIcon />
-        </span>
-        <TrayNetworkIcon />
-        <div className="taskbar-sep-v" />
-        <div className="taskbar-clock">
-          <span>{clockTime}</span>
-          <span>{clockDate}</span>
-        </div>
-      </div>
-    </div>
+    <>
+      <ComputerIcon />
+      <FontAwesomeIcon icon={faCaretRight} />
+      <button className="crumb" onClick={onExit}>
+        Loago Moremi
+      </button>
+      <FontAwesomeIcon icon={faCaretRight} />
+      <span className="crumb-current">Search Results</span>
+    </>
   );
 }
+
+// a folder's auto-selected file, only when its preview pane is open
+const autoSelect = (path) => {
+  const cfg = getFolderConfig(path);
+  return cfg.preview.open
+    ? pickSelection(getNode(TREE, path), cfg.preview.select)
+    : null;
+};
+
+// GitHub Pages serves the app for any unknown path (404.html), so anything
+// other than the root gets the "Windows can't find" dialog
+const KNOWN_PATHS = ["/", "/index.html"];
+const missingPath = () =>
+  KNOWN_PATHS.includes(window.location.pathname)
+    ? null
+    : `${window.location.host}${window.location.pathname}`;
+
+const clockNow = () => {
+  const now = new Date();
+  return {
+    time: now.toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
+    date: now.toLocaleDateString("en-GB"),
+  };
+};
 
 export default function Index() {
-  const [activePane, setActivePane] = useState("This User");
-  const [history, setHistory] = useState(["This User"]);
+  const [history, setHistory] = useState([START_PATH]);
   const [historyIndex, setHistoryIndex] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
-  const [clock, setClock] = useState(() => {
-    const now = new Date();
-    return {
-      time: now.toLocaleTimeString("en-GB", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      date: now.toLocaleDateString("en-GB"),
-    };
+  const [clock, setClock] = useState(clockNow);
+  const [burning, setBurning] = useState(false);
+  const [selected, setSelected] = useState(() => autoSelect(START_PATH));
+  const [sorts, setSorts] = useState({});
+  const [commandMenu, setCommandMenu] = useState(null);
+  const [, setViewTick] = useState(0);
+  const [previewOpen, setPreviewOpen] = useState(
+    () => getFolderConfig(START_PATH).preview.open,
+  );
+  const [previewWidth, setPreviewWidth] = useState(DEFAULT_PREVIEW);
+  const [lostPath, setLostPath] = useState(missingPath);
+  const [query, setQuery] = useState("");
+  const [search, setSearch] = useState({
+    status: "idle",
+    term: "",
+    results: [],
   });
 
-  const [burning, setBurning] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [commandMenu, setCommandMenu] = useState(null);
-
-  const getStatus = () => {
-    if (selectedItem) {
-      switch (selectedItem.itemType) {
-        case "project":
-          return {
-            name: selectedItem.title,
-            type: selectedItem.label,
-            icon: "/assets/icons/program_files.png",
-            fields: [
-              ["Date", selectedItem.date || "-"],
-              [
-                "Status",
-                selectedItem.status === "completed"
-                  ? "Completed"
-                  : "Currently Exploring",
-              ],
-            ],
-          };
-
-        case "experience":
-          return {
-            name: selectedItem.title,
-            type: "Experience",
-            icon: selectedItem.logo || "/assets/icons/xp.png",
-            fields: [["Date", selectedItem.date || "-"]],
-          };
-
-        case "skill":
-          return {
-            name: selectedItem.name,
-            type: "Skill",
-            icon: "/assets/icons/drivers.png",
-            fields: [["Category", selectedItem.category || "-"]],
-          };
-
-        default:
-          return {
-            name: "Unknown Item",
-            type: "File",
-            details: [],
-            tags: [],
-          };
-      }
-    }
-
-    const folderInfo = {
-      "This User": {
-        count: 4,
-        icon: "/assets/icons/user.png",
-      },
-      Drivers: {
-        count: Object.values(skills).flat().length,
-        icon: "/assets/icons/drivers.png",
-      },
-      "Program Files": {
-        count: projects.length,
-        icon: "/assets/icons/program_files.png",
-      },
-      "Event Logs": {
-        count: experience.length,
-        icon: "/assets/icons/xp.png",
-      },
-      Network: {
-        count: 4,
-        icon: "/assets/icons/network.png",
-      },
-    };
-
-    const info = folderInfo[activePane];
-
-    return {
-      name: activePane,
-      type: "Folder",
-      icon: info?.icon || "/assets/icons/folder.png",
-      fields: [["Items", `${info?.count ?? 0} items`]],
-    };
-  };
-
-  const status = getStatus();
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      const now = new Date();
-      setClock({
-        time: now.toLocaleTimeString("en-GB", {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-        date: now.toLocaleDateString("en-GB"),
-      });
-    }, 1000);
-    return () => clearInterval(id);
-  }, []);
-
   const sidebarRef = useRef(null);
+  const searchRef = useRef(null);
   const mobileMenuButtonRef = useRef(null);
   const clickSoundRef = useRef(null);
   const fireSoundRef = useRef(null);
 
+  const activePath = history[historyIndex];
+  const folderNode = getNode(TREE, activePath);
+  const cfg = getFolderConfig(activePath);
+  const view = getView(activePath);
+  const sortOverride = sorts[viewKey(activePath)] ?? null;
+  const rows = sortChildren(folderNode.children, cfg.sort, sortOverride);
+  const groupOptions = cfg.columns.filter((c) => GROUPABLE.includes(c));
+  const groupKey = getGroup(activePath);
+  const groups =
+    groupKey && groupOptions.includes(groupKey)
+      ? groupRows(rows, folderNode.children, groupKey)
+      : null;
+  const searching = query.trim() !== "";
+  const searchDone = search.status === "done" && search.term === query.trim();
+  const status =
+    searching && !selected
+      ? {
+          node: { kind: "folder" },
+          name: "Search Results",
+          type: "Search",
+          fields: [
+            [
+              "Items",
+              searchDone
+                ? `${search.results.length} ${search.results.length === 1 ? "item" : "items"}`
+                : "Searching...",
+            ],
+          ],
+        }
+      : getStatusInfo(selected, folderNode);
+
+  useEffect(() => {
+    const id = setInterval(() => setClock(clockNow()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  // the wait is deliberate: the data is tiny, so the skeleton and the green address bar
+  // are what make it feel like a real search
+  useEffect(() => {
+    const term = query.trim();
+    if (!term) {
+      setSearch({ status: "idle", term: "", results: [] });
+      return;
+    }
+    setSearch((s) => ({ ...s, status: "searching", term }));
+    const id = window.setTimeout(
+      () =>
+        setSearch({
+          status: "done",
+          term,
+          results: searchIndex(SEARCH_INDEX, term),
+        }),
+      500,
+    );
+    return () => window.clearTimeout(id);
+  }, [query]);
+
   useEffect(() => {
     clickSoundRef.current = new Audio("/assets/audio/mouse-click.mp3");
     clickSoundRef.current.volume = 0.6;
+    fireSoundRef.current = new Audio("/assets/audio/fire.mp3");
+    fireSoundRef.current.volume = 0.7;
   }, []);
 
   const playClick = () => {
@@ -585,11 +270,6 @@ export default function Index() {
     } catch (_) {}
   };
 
-  useEffect(() => {
-    fireSoundRef.current = new Audio("/assets/audio/fire.mp3");
-    fireSoundRef.current.volume = 0.7;
-  }, []);
-
   const playFireSound = () => {
     if (!fireSoundRef.current) return;
 
@@ -598,90 +278,149 @@ export default function Index() {
 
     window.setTimeout(() => {
       fireSoundRef.current?.pause();
-      if (fireSoundRef.current) {
-        fireSoundRef.current.currentTime = 0;
-      }
+      if (fireSoundRef.current) fireSoundRef.current.currentTime = 0;
     }, 3500);
   };
 
-  const navigateTo = (pane) => {
-    if (pane === activePane) return;
-
-    playClick();
-    setSelectedItem(null);
+  // everything that has to reset when the open folder changes
+  const arrive = (path) => {
+    setQuery("");
+    setSelected(autoSelect(path));
+    setPreviewOpen(getFolderConfig(path).preview.open);
     setCommandMenu(null);
-
     setIsNavigating(true);
-
-    const newHistory = [...history.slice(0, historyIndex + 1), pane];
-
-    setHistory(newHistory);
-    setHistoryIndex(newHistory.length - 1);
-    setActivePane(pane);
-
     window.setTimeout(() => setIsNavigating(false), 280);
   };
 
-  const goBack = () => {
-    if (historyIndex <= 0) return;
+  const exitSearch = () => {
+    setQuery("");
+    setSelected(autoSelect(activePath));
+  };
+
+  const navigateTo = (path) => {
+    if (query) exitSearch();
+    if (viewKey(path) === viewKey(activePath)) return;
 
     playClick();
-    setSelectedItem(null);
-    setCommandMenu(null);
+    const next = [...history.slice(0, historyIndex + 1), path];
+    setHistory(next);
+    setHistoryIndex(next.length - 1);
+    arrive(path);
+  };
 
-    const newIndex = historyIndex - 1;
-
-    setIsNavigating(true);
-    setHistoryIndex(newIndex);
-    setActivePane(history[newIndex]);
-
-    window.setTimeout(() => setIsNavigating(false), 280);
+  const goBack = () => {
+    if (searching) {
+      exitSearch();
+      return;
+    }
+    if (historyIndex <= 0) return;
+    playClick();
+    const index = historyIndex - 1;
+    setHistoryIndex(index);
+    arrive(history[index]);
   };
 
   const goForward = () => {
     if (historyIndex >= history.length - 1) return;
-
     playClick();
-    setSelectedItem(null);
-    setCommandMenu(null);
-
-    const newIndex = historyIndex + 1;
-
-    setIsNavigating(true);
-    setHistoryIndex(newIndex);
-    setActivePane(history[newIndex]);
-    
-    window.setTimeout(() => setIsNavigating(false), 280);
+    const index = historyIndex + 1;
+    setHistoryIndex(index);
+    arrive(history[index]);
   };
 
-  const canBack = historyIndex > 0;
+  const canBack = historyIndex > 0 || searching;
   const canForward = historyIndex < history.length - 1;
+
+  const selectNode = (node) => {
+    playClick();
+    setSelected(node);
+    // in project and company folders, picking a file shows it even if the pane was closed.
+    // folders like Drivers keep the pane off: their previews would just repeat the row.
+    if (cfg.preview.open && node.kind === "file" && node.preview)
+      setPreviewOpen(true);
+  };
+
+  const onSearchInput = (value) => {
+    if (!query.trim() && value.trim()) setSelected(null);
+    setQuery(value);
+  };
+
+  // a result opens the folder that holds it, with the file selected
+  const openResult = (r) => {
+    const target = r.node.kind === "folder" ? [...r.path, r.node.name] : r.path;
+    navigateTo(target);
+    if (r.node.kind === "file") {
+      setSelected(r.node);
+      if (getFolderConfig(target).preview.open && r.node.preview)
+        setPreviewOpen(true);
+    }
+  };
+
+  const pickResult = (r) => {
+    playClick();
+    setSelected(r.node);
+    if (isCoarse()) openResult(r);
+  };
+
+  const dismissNotFound = () => {
+    window.history.replaceState(null, "", "/");
+    setLostPath(null);
+  };
+
+  // folders open in place, files with an href open in a new tab
+  const openNode = (node) => {
+    if (node.kind === "folder") {
+      navigateTo([...activePath, node.name]);
+    } else if (node.href) {
+      window.open(node.href, "_blank", "noopener,noreferrer");
+    }
+  };
+
+  // sort choices are remembered per folder for the session
+  const setSort = (override) =>
+    setSorts((cur) => ({ ...cur, [viewKey(activePath)]: override }));
+
+  const sortBy = (key) =>
+    setSort(
+      sortOverride?.key === key
+        ? { key, dir: sortOverride.dir === "asc" ? "desc" : "asc" }
+        : { key, dir: "asc" },
+    );
+
+  const chooseSort = (override) => {
+    setSort(override);
+    setCommandMenu(null);
+  };
+
+  const chooseGroup = (key) => {
+    saveGroup(activePath, key);
+    setViewTick((t) => t + 1);
+    setCommandMenu(null);
+  };
+
+  const chooseView = (id) => {
+    saveView(activePath, id);
+    setViewTick((t) => t + 1);
+    setCommandMenu(null);
+  };
 
   const handleCommand = (command) => {
     switch (command) {
       case "organize":
-        setCommandMenu((current) =>
-          current === "organize" ? null : "organize",
-        );
-        break;
-
       case "view":
-        //setViewMode((current) => (current === "icons" ? "details" : "icons"));
-        setCommandMenu(null);
-        break;
+        // menus toggle and stay open, so they return before the close below
+        setCommandMenu((cur) => (cur === command ? null : command));
+        return;
 
       case "open":
-        if (selectedItem?.link) {
-          window.open(selectedItem.link, "_blank", "noopener,noreferrer");
-        }
+        if (selected) openNode(selected);
         break;
 
       case "preview":
-        //setPreviewOpen((current) => !current);
+        setPreviewOpen((open) => !open);
         break;
 
       case "properties":
-        //setPropertiesOpen(true);
         break;
 
       case "github":
@@ -693,22 +432,13 @@ export default function Index() {
         break;
 
       case "help":
-        //setHelpOpen(true);
         break;
 
       case "burn":
         playFireSound();
-
         setBurning(false);
-
-        requestAnimationFrame(() => {
-          setBurning(true);
-        });
-
-        window.setTimeout(() => {
-          setBurning(false);
-        }, 3500);
-
+        requestAnimationFrame(() => setBurning(true));
+        window.setTimeout(() => setBurning(false), 3500);
         break;
 
       default:
@@ -731,14 +461,23 @@ export default function Index() {
     return () => document.removeEventListener("mousedown", handler);
   }, [sidebarOpen]);
 
+  useEffect(() => {
+    if (!commandMenu) return;
+    const handler = (e) => {
+      if (!e.target.closest(".command-dropdown")) setCommandMenu(null);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [commandMenu]);
+
+  const rootPane = activePath[0];
+
   return (
     <>
       <div className="desktop">
+        <h1 className="sr-only">Loago Moremi</h1>
         <div className="explorer-window">
-          {/*<div className="titlebar">*/}
-          <div
-            className={`titlebar ${/Macintosh|Mac OS X/i.test(navigator.userAgent) ? "titlebar--mac" : ""}`}
-          >
+          <div className="titlebar">
             <Win7Btns />
             <button
               ref={mobileMenuButtonRef}
@@ -771,16 +510,49 @@ export default function Index() {
             </div>
 
             <div className="addrbar">
-              <div className="addrbar-path">{breadcrumb(activePane)}</div>
+              <div
+                className={`addrbar-path ${searching && !searchDone ? "is-loading" : ""}`}
+              >
+                {searching ? (
+                  <SearchCrumb onExit={exitSearch} />
+                ) : (
+                  <Breadcrumb path={activePath} onNavigate={navigateTo} />
+                )}
+              </div>
 
-              <div className="addrbar-search">
-                <span>Search Loago Moremi...</span>
-
-                <img
-                  src="/assets/icons/search.png"
-                  alt=""
-                  className="addrbar-search-icon"
+              <div className="addrbar-search" role="search">
+                <input
+                  ref={searchRef}
+                  className="addrbar-search-input"
+                  type="text"
+                  value={query}
+                  placeholder="Search Loago Moremi..."
+                  aria-label="Search Loago Moremi"
+                  spellCheck={false}
+                  autoComplete="off"
+                  onChange={(e) => onSearchInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Escape") exitSearch();
+                  }}
                 />
+                {query ? (
+                  <button
+                    className="addrbar-search-clear"
+                    aria-label="Clear search"
+                    onClick={() => {
+                      exitSearch();
+                      searchRef.current?.focus();
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faXmark} />
+                  </button>
+                ) : (
+                  <img
+                    src="/assets/icons/search.png"
+                    alt=""
+                    className="addrbar-search-icon"
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -796,34 +568,111 @@ export default function Index() {
 
               {commandMenu === "organize" && (
                 <div className="command-menu">
+                  <p className="command-menu-label">Sort by</p>
+                  <button
+                    className={!sortOverride ? "is-active" : ""}
+                    onClick={() => chooseSort(null)}
+                  >
+                    Default order
+                  </button>
+                  <button
+                    className={
+                      sortOverride?.key === "name" && sortOverride.dir === "asc"
+                        ? "is-active"
+                        : ""
+                    }
+                    onClick={() => chooseSort({ key: "name", dir: "asc" })}
+                  >
+                    Name (A to Z)
+                  </button>
+                  <button
+                    className={
+                      sortOverride?.key === "name" &&
+                      sortOverride.dir === "desc"
+                        ? "is-active"
+                        : ""
+                    }
+                    onClick={() => chooseSort({ key: "name", dir: "desc" })}
+                  >
+                    Name (Z to A)
+                  </button>
+
+                  {groupOptions.length > 0 && (
+                    <>
+                      <hr className="command-menu-sep" />
+                      <p className="command-menu-label">Group by</p>
+                      <button
+                        className={!groups ? "is-active" : ""}
+                        onClick={() => chooseGroup(null)}
+                      >
+                        None
+                      </button>
+                      {groupOptions.map((key) => (
+                        <button
+                          key={key}
+                          className={
+                            groups && groupKey === key ? "is-active" : ""
+                          }
+                          onClick={() => chooseGroup(key)}
+                        >
+                          {COLUMNS[key].label}
+                        </button>
+                      ))}
+                    </>
+                  )}
+
+                  <hr className="command-menu-sep" />
                   <button onClick={() => window.location.reload()}>
                     Refresh
                   </button>
-
-                  <button onClick={() => setSelectedItem(null)}>
+                  <button
+                    onClick={() => {
+                      setSelected(null);
+                      setCommandMenu(null);
+                    }}
+                  >
                     Clear Selection
                   </button>
                 </div>
               )}
             </div>
 
-            <button
-              className="command-button"
-              onClick={() => handleCommand("view")}
-            >
-              View <FontAwesomeIcon icon={faCaretDown} />
-            </button>
+            <div className="command-dropdown">
+              <button
+                className="command-button"
+                onClick={() => handleCommand("view")}
+              >
+                View <FontAwesomeIcon icon={faCaretDown} />
+              </button>
+
+              {commandMenu === "view" && (
+                <div className="command-menu">
+                  {VIEW_OPTIONS.map(([id, label]) => (
+                    <button
+                      key={id}
+                      className={view === id ? "is-active" : ""}
+                      onClick={() => chooseView(id)}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
             <button
               className="command-button"
               onClick={() => handleCommand("open")}
-              disabled={!selectedItem?.link}
+              disabled={
+                !selected || (selected.kind !== "folder" && !selected.href)
+              }
             >
               Open
             </button>
 
             <button
-              className="command-button"
+              className={`command-button ${previewOpen ? "is-pressed" : ""}`}
+              aria-pressed={previewOpen}
               onClick={() => handleCommand("preview")}
             >
               Preview
@@ -836,7 +685,7 @@ export default function Index() {
               Properties
             </button>
 
-            {activePane === "Program Files" && (
+            {rootPane === FOLDERS.projects && (
               <button
                 className="command-button"
                 onClick={() => handleCommand("github")}
@@ -845,7 +694,7 @@ export default function Index() {
               </button>
             )}
 
-            {activePane === "Event Logs" && (
+            {rootPane === FOLDERS.experience && (
               <button
                 className="command-button"
                 onClick={() => handleCommand("print")}
@@ -880,10 +729,9 @@ export default function Index() {
               className={`sidebar ${sidebarOpen ? "mobile-open" : ""}`}
               ref={sidebarRef}
             >
-              {/* Favorites */}
               <div className="sidebar-section-title">
                 <span className="sidebar-section-icon">
-                  <img src="/assets/icons/favorites.ico" />
+                  <img src="/assets/icons/favorites.ico" alt="" />
                 </span>
                 <span>Favorites</span>
               </div>
@@ -894,9 +742,7 @@ export default function Index() {
                     key={link.name}
                     className="sidebar-link-item"
                     onClick={() => {
-                      if (link.name === "Desktop") {
-                        navigateTo("This User");
-                      }
+                      if (link.name === "Desktop") navigateTo([FOLDERS.user]);
                     }}
                   >
                     <img src={link.icon} alt="" className="sidebar-link-icon" />
@@ -905,37 +751,31 @@ export default function Index() {
                 ))}
               </div>
 
-              {/* Libraries */}
               <div className="sidebar-section-title sidebar-section-title--libraries">
                 <span className="sidebar-section-icon">
-                  <FolderIcon size={14} />
+                  <FolderIcon />
                 </span>
                 <span>Libraries</span>
               </div>
 
               <div className="sidebar-group sidebar-group--indented">
-                {LIBRARY_LINKS.map((pane) => (
-                  <div key={pane.name}>
+                {LIBRARY_LINKS.map((lib) => (
+                  <div key={lib.name}>
                     <div
-                      className={`sidebar-item ${
-                        activePane === pane.name ? "active" : ""
-                      }`}
-                      onClick={() => {
-                        navigateTo(pane.name);
-                      }}
+                      className={`sidebar-item ${rootPane === lib.name ? "active" : ""}`}
+                      onClick={() => navigateTo([lib.name])}
                     >
                       <img
-                        src={pane.icon}
+                        src={lib.icon}
                         alt=""
-                        className="sidebar-link-icon sidebar-library-icon"
+                        className="sidebar-link-icon"
                       />
-                      <span>{pane.name}</span>
+                      <span>{lib.name}</span>
                     </div>
                   </div>
                 ))}
               </div>
 
-              {/* Computer */}
               <div className="sidebar-section-title sidebar-section-title--computer">
                 <span className="sidebar-section-icon">
                   <img
@@ -951,19 +791,11 @@ export default function Index() {
                 {SIDEBAR_COMPUTER.map((item) => (
                   <div
                     key={item.name}
-                    className={`sidebar-item ${
-                      activePane === item.name ? "active" : ""
-                    }`}
-                    onClick={() => navigateTo("This User")}
+                    className="sidebar-item"
+                    onClick={() => navigateTo([FOLDERS.user])}
                   >
                     <span className="sidebar-chevron sidebar-chevron--empty" />
-
-                    <img
-                      src={item.icon}
-                      alt=""
-                      className="sidebar-link-icon sidebar-library-icon"
-                    />
-
+                    <img src={item.icon} alt="" className="sidebar-link-icon" />
                     <span className="sidebar-item-label">{item.name}</span>
                   </div>
                 ))}
@@ -982,39 +814,68 @@ export default function Index() {
             </div>
 
             <div className="main-pane">
-              <div key={activePane} className="pane-shell">
-                {activePane === "This User" && <AboutPane />}
+              {searching ? (
+                <div key="search" className="pane-shell">
+                  <div className="pane-header">
+                    <span className="pane-title">Search Results</span>
+                    <span className="pane-count">
+                      {searchDone
+                        ? `${search.results.length} ${search.results.length === 1 ? "item" : "items"}`
+                        : "Searching..."}
+                    </span>
+                  </div>
+                  <div className="folder-split">
+                    <div className="folder-list">
+                      <SearchResults
+                        term={query.trim()}
+                        loading={!searchDone}
+                        results={search.results}
+                        selected={selected}
+                        onSelect={pickResult}
+                        onOpen={openResult}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div key={viewKey(activePath)} className="pane-shell">
+                  <div className="pane-header">
+                    <span className="pane-title">{folderNode.name}</span>
+                    <span className="pane-count">
+                      {rows.length} {rows.length === 1 ? "item" : "items"}
+                    </span>
+                  </div>
 
-                {activePane === "Drivers" && (
-                  <SkillsPane
-                    onSelect={setSelectedItem}
-                    selectedItem={selectedItem}
-                    playClick={playClick}
+                  <SplitPane
+                    width={previewWidth}
+                    onResize={setPreviewWidth}
+                    list={
+                      <FolderView
+                        rows={rows}
+                        groups={groups}
+                        view={view}
+                        columns={cfg.columns}
+                        selected={selected}
+                        sort={sortOverride}
+                        onSelect={selectNode}
+                        onOpen={openNode}
+                        onSort={sortBy}
+                      />
+                    }
+                    preview={
+                      previewOpen ? (
+                        <Preview node={selected} folder={folderNode} />
+                      ) : null
+                    }
                   />
-                )}
-
-                {activePane === "Program Files" && (
-                  <ProjectsPane
-                    onSelect={setSelectedItem}
-                    selectedItem={selectedItem}
-                    playClick={playClick}
-                  />
-                )}
-
-                {activePane === "Event Logs" && (
-                  <ExperiencePane
-                    onSelect={setSelectedItem}
-                    selectedItem={selectedItem}
-                    playClick={playClick}
-                  />
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
 
           <div className="statusbar">
             <div className="statusbar-icon">
-              <img src={status.icon} alt="" />
+              <NodeIcon node={status.node} size={48} />
             </div>
 
             <div className="statusbar-info">
@@ -1047,17 +908,25 @@ export default function Index() {
             Windows XP
           </a>{" "}
           icon by{" "}
-          <a target="_blank" href="https://icons8.com">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://icons8.com"
+          >
             Icons8
           </a>
         </div>
       </div>
+
       {burning && (
         <div className="burn-overlay">
           <img src="/assets/burn-elmo.gif" alt="" />
         </div>
       )}
+
       <Taskbar clockTime={clock.time} clockDate={clock.date} />
+
+      {lostPath && <NotFoundDialog path={lostPath} onClose={dismissNotFound} />}
     </>
   );
 }
