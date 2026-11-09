@@ -65,10 +65,10 @@ const thisUser = () =>
         type: "PDF",
         bytes: FILE_META.cv.bytes,
         modified: FILE_META.cv.modified,
-        href: "/assets/documents/Loago_Moremi_CV.pdf",
+        href: "/assets/documents/Public_CV.pdf",
         preview: {
           kind: "pdf",
-          data: { href: "/assets/documents/Loago_Moremi_CV.pdf" },
+          data: { href: "/assets/documents/Public_CV.pdf" },
         },
       }),
     ],

@@ -269,8 +269,6 @@ ul { list-style: none; }
 .toolbar-nav--back { background-image: url("/assets/icons/wm-back.svg"); }
 
 .toolbar-nav--fwd {
-  width: 20px;
-  height: 20px;
   background-image: url("/assets/icons/wm-back.svg");
   transform: scaleX(-1);
 }
